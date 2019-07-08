@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <button type="submit" class='btn-step1'>Login</button>
       <button type="submit" class='btn-step1'>Sign up</button>
   `
+})//End of domcontent loading
 
-})
 loginDiv.addEventListener('click', function(e) {
   const firstButtons = document.querySelectorAll('.btn-step1')
   if (e.target.className === 'btn-step1') {
@@ -41,7 +41,7 @@ loginDiv.addEventListener('click', function(e) {
     const signUpBtn = loginDiv.querySelector('#signup')
     signUpPost(signUpBtn)
   }
-})
+})//end of login/signup eventlistener
 
 function loginPost(loginBtn) {
   loginBtn.addEventListener('click', function(e) {
@@ -52,18 +52,17 @@ function loginPost(loginBtn) {
     .then(user => {
       currentUser = user
       loggedIn()
-
       navBarContainer.innerHTML = `
       <li>${currentUser.name}</li>
       `
     })
   })
-}
+}//end of login function
 
 function loggedIn() {
   loginDiv.style.display = "none"
   fetchAllTicket()
-}
+}//login verifictaion
 
 function signUpPost(signupBtn) {
   signupBtn.addEventListener('click', function(e) {
@@ -91,7 +90,21 @@ function signUpPost(signupBtn) {
       `
     })
   })
-}
+}//end of signup form with listener
+
+function fetchAllTicket(){
+  fetch(ticketsUrl)
+  .then(r=> r.json())
+  .then(json => {
+    json.forEach(ticket => ticketArray.push(ticket))
+  })
+}//fetch of all the tickets
+
+function renderTicket(element) {
+  ticketContainer.innerHTML += `
+  <li data-id=${element.id}>${element.title}</li>
+  `
+}//render all tickets
 
 function filterArray(category) {
   ticketContainer.innerHTML=""
@@ -100,7 +113,7 @@ function filterArray(category) {
     categoryTickets.forEach(ticket => {
       renderTicket(ticket)
   })
-}
+}// filtered tickets
 
 mainCategoryContainer.addEventListener("click", event => {
   switch(event.target.innerText) {
@@ -110,24 +123,24 @@ mainCategoryContainer.addEventListener("click", event => {
 
   case "Concerts":
     filterArray("Concerts")
-<<<<<<< HEAD
       break;
       case "My Tickets":
         fetch(`http://localhost:3000/users/${currentUser.username}`)
         .then(r => r.json())
-        .then(user => console.log(user.tickets))
+        .then(user => user.tickets)
+        .then(tickets => {
+          ticketContainer.innerHTML=`
+          My Tickets
+          <hr>`
+          tickets.forEach(ticket => {
+            renderTicket(ticket)})
+        })
       break;
 
       case "Sports":
       filterArray("Sports")
         break;
 
-        // case "My Tickets":
-        //
-        //   fetch("http://localhost:3000/users/")
-        //       renderTicket(ticket)
-        //     })
-        //   break;
         case "All Tickets":
         let filteredArray = ticketArray.filter(ticket => ticket.status === true)
         ticketContainer.innerHTML=""
@@ -138,23 +151,7 @@ mainCategoryContainer.addEventListener("click", event => {
 
   default:
 }
-
-})
-
-
-function fetchAllTicket(){
-  fetch(ticketsUrl)
-  .then(r=> r.json())
-  .then(json => {
-    json.forEach(ticket => ticketArray.push(ticket))
-  })
-}
-
-function renderTicket(element) {
-  ticketContainer.innerHTML += `
-    <li data-id=${element.id}>${element.title}</li>
-  `
-}
+})//Event listener fo main container
 
 ticketContainer.addEventListener('click', function(e) {
   if (e.target.dataset.id) {
@@ -166,7 +163,7 @@ ticketContainer.addEventListener('click', function(e) {
       showTicket(json)
     })
   }
-})
+})//event listener for tickets container/ FETCHING ticket data
 
 function showTicket(ticket) {
   ticketInfo.innerHTML = `
@@ -178,7 +175,7 @@ function showTicket(ticket) {
     <button id='btn-buy' data-id=${ticket.id}>Buy Now for $${ticket.buy_now}</button>
     <button id='btn-bid' data-id=${ticket.id}>Bid</button>
   `
-}
+}// render the ticket info
 
 ticketInfo.addEventListener('click', function(e) {
   if (e.target.id === "btn-buy") {
@@ -204,7 +201,7 @@ ticketInfo.addEventListener('click', function(e) {
       ticketInfo.innerHTML = `Purchased!`
     })
   }
-})
+})// listene rbuttons for buying tickets
 
 function purchaseTicket() {
 
