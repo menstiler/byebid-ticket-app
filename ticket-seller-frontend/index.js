@@ -105,11 +105,12 @@ function filterArray(category) {
 mainCategoryContainer.addEventListener("click", event => {
   switch(event.target.innerText) {
   case "Movies":
-  filterArray("Movies")
+    filterArray("Movies")
     break;
 
-    case "Concerts":
+  case "Concerts":
     filterArray("Concerts")
+<<<<<<< HEAD
       break;
       case "My Tickets":
         fetch(`http://localhost:3000/users/${currentUser.username}`)
@@ -134,8 +135,8 @@ mainCategoryContainer.addEventListener("click", event => {
             renderTicket(ticket)
           })
           break;
+
   default:
-    // code block
 }
 
 })
