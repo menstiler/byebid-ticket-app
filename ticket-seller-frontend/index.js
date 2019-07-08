@@ -207,7 +207,7 @@ ticketInfo.addEventListener('click', function(e) {
   if (e.target.id === "btn-buy") {
     buyNow(e)
   }
-})// listene rbuttons for buying tickets
+})// listener buttons for buying tickets
 
 function removeTicket(ticket, ticketObj) {
   const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`)
@@ -238,6 +238,7 @@ fetch("http://localhost:3000/purchases", {
 .then(resp => resp.json())
 .then(json => {
   ticketInfo.innerHTML = `Purchased!`
+  removeTicket(ticketId, ticketObj)
 })}
 
 ticketInfo.addEventListener('submit', e=>{
