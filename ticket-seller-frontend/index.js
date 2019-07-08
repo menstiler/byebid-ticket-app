@@ -35,11 +35,15 @@ loginDiv.addEventListener('click', function(e) {
   } else if (e.target.innerText === 'Sign up') {
     loginDiv.innerHTML = `
     <form>
+    <div class='row'>
+    <div class="input-field col s6">
       <input type='text' value="" name="" placeholder="Name">
       <input type='text' value="" name="" placeholder="Email">
       <input type='text' value="" name="" placeholder="Username">
       <input type='text' value="" name="" placeholder="Credit Card">
       <button type="submit" id='signup' class='waves-effect waves-light btn'>Sign up</button>
+      </div>
+      </div>
     </form>
     `
     const signUpBtn = loginDiv.querySelector('#signup')
@@ -127,31 +131,31 @@ mainCategoryContainer.addEventListener("click", event => {
 
   case "Concerts":
     filterArray("Concerts")
-      break;
-      case "My Tickets":
-        fetch(`http://localhost:3000/users/${currentUser.username}`)
-        .then(r => r.json())
-        .then(user => user.tickets)
-        .then(tickets => {
-          ticketContainer.innerHTML=`
-          My Tickets
-          <hr>`
-          tickets.forEach(ticket => {
-            renderTicket(ticket)})
-        })
-      break;
+    break;
+  case "My Tickets":
+    fetch(`http://localhost:3000/users/${currentUser.username}`)
+    .then(r => r.json())
+    .then(user => user.tickets)
+    .then(tickets => {
+      ticketContainer.innerHTML=`
+      My Tickets
+      <hr>`
+      tickets.forEach(ticket => {
+        renderTicket(ticket)})
+    })
+    break;
 
-      case "Sports":
-      filterArray("Sports")
-        break;
+  case "Sports":
+    filterArray("Sports")
+    break;
 
-        case "All Tickets":
-        let filteredArray = ticketArray.filter(ticket => ticket.status === true)
-        ticketContainer.innerHTML=""
-          filteredArray.forEach(ticket =>{
-            renderTicket(ticket)
-          })
-          break;
+  case "All Tickets":
+    let filteredArray = ticketArray.filter(ticket => ticket.status === true)
+    ticketContainer.innerHTML=""
+      filteredArray.forEach(ticket => {
+        renderTicket(ticket)
+       })
+    break;
 
   default:
 }
@@ -176,9 +180,13 @@ function showTicket(ticket) {
     <p>${ticket.location}</p>
     <p>${ticket.time}</p>
     <p>${ticket.min_price}</p>
+  `
+  if (ticket.status) {
+    ticketInfo.innerHTML +=  `
     <button id='btn-buy' data-id=${ticket.id}>Buy Now for $${ticket.buy_now}</button>
     <button id='btn-bid' data-id=${ticket.id}>Bid</button>
-  `
+    `
+  }
 }// render the ticket info
 
 ticketInfo.addEventListener('click', function(e) {
@@ -203,10 +211,16 @@ ticketInfo.addEventListener('click', function(e) {
     .then(resp => resp.json())
     .then(json => {
       ticketInfo.innerHTML = `Purchased!`
+      removeTicket(ticketId, ticketObj)
+
     })
   }
-})// listene rbuttons for buying tickets
+})// listener buttons for buying tickets
 
-function purchaseTicket() {
-
+function removeTicket(ticket, ticketObj) {
+  const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`)
+  ticketLi.remove()
+  let index = ticketArray.indexOf(ticketObj)
+  debugger
+  ticketArray.splice(index, 1)
 }

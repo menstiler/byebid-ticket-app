@@ -9,11 +9,7 @@ class PurchasesController < ApplicationController
 
   def index
     purchases = Purchase.all
-<<<<<<< HEAD
-    render json: purchases, include: [:user,:ticket]
-=======
     render json: purchases, include: [:user, :ticket]
->>>>>>> 41fd234dbdce1b1327a5c1cb50bdbc3b7c3b72e4
   end
 
   private
