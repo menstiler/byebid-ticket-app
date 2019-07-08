@@ -11,20 +11,24 @@ let currentTicket
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
-      <button type="submit" class='btn-step1'>Login</button>
-      <button type="submit" class='btn-step1'>Sign up</button>
+      <button type="submit" class='btn-step1 waves-effect waves-light btn'>Login</button>
+      <button type="submit" class='btn-step1 waves-effect waves-light btn'>Sign up</button>
   `
 
 })
 loginDiv.addEventListener('click', function(e) {
   const firstButtons = document.querySelectorAll('.btn-step1')
-  if (e.target.className === 'btn-step1') {
+  if (e.target.classList) {
     firstButtons.forEach(button => button.style.display = "none")
   }
   if (e.target.innerText === 'Login') {
     loginDiv.innerHTML = `
-      <input type='text' value="" name="" placeholder="Username">
-      <button type="submit" id='login-confirm'>Login</button>
+    <div class='row'>
+    <div class="input-field col s6">
+      <input type='text' id="username" value="" name="" placeholder="Username">
+      <button type="submit" id='login-confirm' class='waves-effect waves-light btn'>Login</button>
+    </div>
+    </div>
     `
     const loginBtn = loginDiv.querySelector('#login-confirm')
     loginPost(loginBtn)
@@ -35,7 +39,7 @@ loginDiv.addEventListener('click', function(e) {
       <input type='text' value="" name="" placeholder="Email">
       <input type='text' value="" name="" placeholder="Username">
       <input type='text' value="" name="" placeholder="Credit Card">
-      <button type="submit" id='signup'>Sign up</button>
+      <button type="submit" id='signup' class='waves-effect waves-light btn'>Sign up</button>
     </form>
     `
     const signUpBtn = loginDiv.querySelector('#signup')
