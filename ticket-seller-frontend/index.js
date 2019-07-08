@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
       <button type="submit" class='btn-step1'>Login</button>
       <button type="submit" class='btn-step1'>Sign up</button>
   `
-  // fetchAllTicket()
 })
 loginDiv.addEventListener('click', function(e) {
   const firstButtons = document.querySelectorAll('.btn-step1')
@@ -50,9 +49,14 @@ function loginPost(loginBtn) {
     .then(user => {
       currentUser = user
     })
+    loggedIn()
   })
 }
 
+function loggedIn() {
+  loginDiv.style.display = ""
+  fetchAllTicket()
+}
 function signUpPost(signupBtn) {
   signupBtn.addEventListener('click', function(e) {
     e.preventDefault()
