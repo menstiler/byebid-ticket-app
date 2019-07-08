@@ -8,6 +8,7 @@ let ticketArray = []
 let currentUser
 const navBarContainer = document.querySelector("#nav-mobile")
 let currentTicket
+const ticketForm = document.querySelector("#add-ticket")
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
@@ -157,6 +158,19 @@ mainCategoryContainer.addEventListener("click", event => {
        })
     break;
 
+      case "Add Ticket":
+        ticketInfo.innerHTML=`
+        <form>
+          <input type='text' value="" name="" placeholder="Title">
+          <input type='text' value="" name="" placeholder="Category">
+          <input type='text' value="" name="" placeholder="Location">
+          <input type='text' value="" name="" placeholder="Time">
+          <input type='text' value="" name="" placeholder="Min Price">
+          <input type='text' value="" name="" placeholder="Buy Now">
+          <button type="submit" id='add-ticket'>Add Ticket</button>
+        </form>
+        `
+        break;
   default:
 }
 })//Event listener fo main container
@@ -191,31 +205,9 @@ function showTicket(ticket) {
 
 ticketInfo.addEventListener('click', function(e) {
   if (e.target.id === "btn-buy") {
-    const ticketId = e.target.dataset.id
-    let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
-    console.log(currentUser);
-    console.log(currentTicket);
-    fetch("http://localhost:3000/purchases", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({
-        user_id: currentUser.id,
-        ticket_id: currentTicket.id,
-        price: ticketObj.buy_now,
-        seller_id: ticketObj.seller_id,
-      })
-    })
-    .then(resp => resp.json())
-    .then(json => {
-      ticketInfo.innerHTML = `Purchased!`
-      removeTicket(ticketId, ticketObj)
-
-    })
+    buyNow(e)
   }
-})// listener buttons for buying tickets
+})// listene rbuttons for buying tickets
 
 function removeTicket(ticket, ticketObj) {
   const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`)
@@ -224,3 +216,50 @@ function removeTicket(ticket, ticketObj) {
   debugger
   ticketArray.splice(index, 1)
 }
+
+function buyNow(e){
+const ticketId = e.target.dataset.id
+let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
+console.log(currentUser);
+console.log(currentTicket);
+fetch("http://localhost:3000/purchases", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  body: JSON.stringify({
+    user_id: currentUser.id,
+    ticket_id: currentTicket.id,
+    price: ticketObj.buy_now,
+    seller_id: ticketObj.seller_id,
+  })
+})
+.then(resp => resp.json())
+.then(json => {
+  ticketInfo.innerHTML = `Purchased!`
+})}
+
+ticketInfo.addEventListener('submit', e=>{
+  e.preventDefault()
+  console.log (e.target[0])
+  let formInput = {
+    title: e.target[0].value,
+    category: e.target[1].value,
+    location: e.target[2].value,
+    time: e.target[3].value,
+    min_price: e.target[4].value,
+    buy_now: e.target[5].value
+
+  }
+  fetch(ticketsUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify(formInput)
+  })
+  .then(response => response.json())
+  .then(json => ticketArray.push(json))
+})
