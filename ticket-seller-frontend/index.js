@@ -6,6 +6,7 @@ const usersUrl = "http://localhost:3000/users"
 const ticketInfo = document.querySelector('#ticket-info')
 let ticketArray = []
 let currentUser
+let currentTicket
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
@@ -48,15 +49,16 @@ function loginPost(loginBtn) {
     .then(response => response.json())
     .then(user => {
       currentUser = user
+      loggedIn()
     })
-    loggedIn()
   })
 }
 
 function loggedIn() {
-  loginDiv.style.display = ""
+  loginDiv.style.display = "none"
   fetchAllTicket()
 }
+
 function signUpPost(signupBtn) {
   signupBtn.addEventListener('click', function(e) {
     e.preventDefault()
@@ -81,31 +83,27 @@ function signUpPost(signupBtn) {
   })
 }
 
+function filterArray(category) {
+  ticketContainer.innerHTML=""
+  let filteredArray = ticketArray.filter(ticket => ticket.status === true)
+  let categoryTickets = filteredArray.filter(ticket => ticket.category === category)
+    categoryTickets.forEach(ticket => {
+      renderTicket(ticket)
+  })
+}
 
 mainCategoryContainer.addEventListener("click", event => {
   switch(event.target.innerText) {
   case "Movies":
-  ticketContainer.innerHTML=""
-    let movieTickets = ticketArray.filter(ticket => ticket.category === "Movies")
-      movieTickets.forEach(ticket => {
-        renderTicket(ticket)
-      })
+  filterArray("Movies")
     break;
 
     case "Concerts":
-    ticketContainer.innerHTML=""
-      let concertTicket = ticketArray.filter(ticket => ticket.category === "Concerts")
-        concertTicket.forEach(ticket => {
-          renderTicket(ticket)
-        })
+    filterArray("Concerts")
       break;
 
       case "Sports":
-      ticketContainer.innerHTML=""
-        let sportTicket = ticketArray.filter(ticket => ticket.category === "Sports")
-          sportTicket.forEach(ticket => {
-            renderTicket(ticket)
-          })
+      filterArray("Sports")
         break;
 
         // case "My Tickets":
@@ -115,9 +113,9 @@ mainCategoryContainer.addEventListener("click", event => {
         //     })
         //   break;
         case "All Tickets":
+        let filteredArray = ticketArray.filter(ticket => ticket.status === true)
         ticketContainer.innerHTML=""
-          ticketArray.forEach(ticket =>{
-            console.log(ticket)
+          filteredArray.forEach(ticket =>{
             renderTicket(ticket)
           })
           break;
@@ -147,7 +145,10 @@ ticketContainer.addEventListener('click', function(e) {
     const ticketId = e.target.dataset.id
     fetch(`${ticketsUrl}/${ticketId}`)
     .then(response => response.json())
-    .then(json => showTicket(json))
+    .then(json => {
+      currentTicket = json
+      showTicket(json)
+    })
   }
 })
 
@@ -166,12 +167,27 @@ function showTicket(ticket) {
 ticketInfo.addEventListener('click', function(e) {
   if (e.target.id === "btn-buy") {
     const ticketId = e.target.dataset.id
-    fetch(`${ticketsUrl}/${ticketId}`, {
+    let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
+    console.log(currentUser);
+    console.log(currentTicket);
+    fetch("http://localhost:3000/purchases", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
-      }
+      },
+      body: JSON.stringify({
+        user_id: currentUser.id,
+        ticket_id: currentTicket.id,
+        price: ticketObj.buy_now,
+        seller_id: ticketObj.seller_id,
+      })
     })
+    .then(resp => resp.json())
+    .then(json => console.log(json))
   }
 })
+
+function purchaseTicket() {
+
+}

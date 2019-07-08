@@ -2,9 +2,15 @@ class PurchasesController < ApplicationController
 
   def create
     purchase = Purchase.create(purchase_params)
+    ticket = Ticket.find(params[:ticket_id])
+    ticket.update(status: false)
     render json: purchase
   end
 
+  def index
+    purchases = Purchase.all
+    render json: purchases
+  end
 
   private
 
