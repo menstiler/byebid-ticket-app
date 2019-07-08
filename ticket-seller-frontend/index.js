@@ -111,6 +111,11 @@ mainCategoryContainer.addEventListener("click", event => {
     case "Concerts":
     filterArray("Concerts")
       break;
+      case "My Tickets":
+        fetch(`http://localhost:3000/users/${currentUser.username}`)
+        .then(r => r.json())
+        .then(user => console.log(user.tickets))
+      break;
 
       case "Sports":
       filterArray("Sports")
@@ -194,7 +199,9 @@ ticketInfo.addEventListener('click', function(e) {
       })
     })
     .then(resp => resp.json())
-    .then(json => console.log(json))
+    .then(json => {
+      ticketInfo.innerHTML = `Purchased!`
+    })
   }
 })
 
