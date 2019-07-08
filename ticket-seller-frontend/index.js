@@ -7,6 +7,7 @@ let ticketArray = []
 mainCategoryContainer.addEventListener("click", event => {
   switch(event.target.innerText) {
   case "Movies":
+  ticketContainer.innerHTML=""
     let movieTickets = ticketArray.filter(ticket => ticket.category === "Movies")
       movieTickets.forEach(ticket => {
         renderTicket(ticket)
@@ -14,6 +15,7 @@ mainCategoryContainer.addEventListener("click", event => {
     break;
 
     case "Concerts":
+    ticketContainer.innerHTML=""
       let concertTicket = ticketArray.filter(ticket => ticket.category === "Concerts")
         concertTicket.forEach(ticket => {
           renderTicket(ticket)
@@ -21,12 +23,26 @@ mainCategoryContainer.addEventListener("click", event => {
       break;
 
       case "Sports":
+      ticketContainer.innerHTML=""
         let sportTicket = ticketArray.filter(ticket => ticket.category === "Sports")
           sportTicket.forEach(ticket => {
             renderTicket(ticket)
           })
         break;
 
+        // case "My Tickets":
+        //
+        //   fetch("http://localhost:3000/users/")
+        //       renderTicket(ticket)
+        //     })
+        //   break;
+        case "All Tickets":
+        ticketContainer.innerHTML=""
+          ticketArray.forEach(ticket =>{
+            console.log(ticket)
+            renderTicket(ticket)
+          })
+          break;
   default:
     // code block
 }
@@ -44,10 +60,8 @@ function fetchAllTicket(){
 }
 
 function renderTicket(element) {
-  const ticketLi = document.createElement('li')
-  ticketContainer.innerHTML=""
-  ticketLi.innerHTML += `
-    <p>${element.title}</p>
+  ticketContainer.innerHTML += `
+    <li data-id=${element.id}>${element.title}</li>
   `
-  ticketContainer.appendChild(ticketLi)
+  // ticketContainer.appendChild(ticketLi)
 }
