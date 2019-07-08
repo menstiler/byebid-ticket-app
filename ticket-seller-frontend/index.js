@@ -6,12 +6,14 @@ const usersUrl = "http://localhost:3000/users"
 const ticketInfo = document.querySelector('#ticket-info')
 let ticketArray = []
 let currentUser
+const navBarContainer = document.querySelector("#nav-mobile")
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
       <button type="submit" class='btn-step1'>Login</button>
       <button type="submit" class='btn-step1'>Sign up</button>
   `
+
 })
 loginDiv.addEventListener('click', function(e) {
   const firstButtons = document.querySelectorAll('.btn-step1')
@@ -48,13 +50,16 @@ function loginPost(loginBtn) {
     .then(response => response.json())
     .then(user => {
       currentUser = user
+      loggedIn()
+      navBarContainer.innerHTML = `
+      <li>${currentUser.name}</li>
+      `
     })
-    loggedIn()
   })
 }
 
 function loggedIn() {
-  loginDiv.style.display = ""
+  loginDiv.style.display = "none"
   fetchAllTicket()
 }
 function signUpPost(signupBtn) {
@@ -76,7 +81,11 @@ function signUpPost(signupBtn) {
     })
     .then(response => response.json())
     .then(user => {
-      console.log(user);
+      currentUser = user
+      loggedIn()
+      navBarContainer.innerHTML = `
+      <li>${currentUser.name}</li>
+      `
     })
   })
 }
