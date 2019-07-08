@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   def index
     users = User.all
-    render json: users, include: [:purchases]
+    render json: users
   end
 
   def create
@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
   def show
     user = User.find_by(username: params[:username])
-    render json: user, include: [:purchases]
+    render json: user
   end
 
   def destroy

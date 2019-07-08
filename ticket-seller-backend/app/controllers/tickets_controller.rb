@@ -1,7 +1,7 @@
 class TicketsController < ApplicationController
   def index
-    ticket = Ticket.all
-    render json: ticket
+    tickets = Ticket.all
+    render json: tickets
   end
 
   def show
