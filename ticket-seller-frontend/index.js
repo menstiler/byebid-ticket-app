@@ -52,12 +52,10 @@ function loginPost(loginBtn) {
     .then(user => {
       currentUser = user
       loggedIn()
-<<<<<<< HEAD
+
       navBarContainer.innerHTML = `
       <li>${currentUser.name}</li>
       `
-=======
->>>>>>> 60a131807fdfcc3cb1f4cf8ac9a2f76bb5a7aab4
     })
   })
 }
