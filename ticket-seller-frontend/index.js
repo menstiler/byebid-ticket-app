@@ -283,6 +283,7 @@ function showTicket(ticket) {
   else if (parsedTime > 12){
     time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
   }
+  debugger;
   ticketInfo.classList = "card row s6"
 
   ticketInfo.innerHTML = `
