@@ -12,7 +12,11 @@ class UsersController < ApplicationController
 
   def show
     user = User.find_by(username: params[:username])
-    render json: user
+    if user
+      render json: user, status: :ok
+    else
+      render json: {status: "error", code: 422, message: "user not found" }
+    end
   end
 
   def destroy
