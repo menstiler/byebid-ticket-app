@@ -321,7 +321,7 @@ ticketInfo.addEventListener('click', function(e) {
     buyNow(e)
   } else if (e.target.id === "btn-bid") {
     bidInput(e)
-  } else if (e.target.id == "btn-sell") {
+  } else if (e.target.id === "btn-sell") {
     sellTicketForm(e)
   }
 })// listener buttons for buying tickets
@@ -397,6 +397,7 @@ function changeTicketStatus(ticket, ticketObj) {
     debugger
     ticketArray[index].status = false
   } else {
+    ticketLi.remove()
     debugger
     ticketArray[index].status = true
   }
@@ -466,6 +467,7 @@ function sellTicket(e) {
 }
 
 function deletePurchase(ticketId) {
+  debugger
   fetch(`http://localhost:3000/purchases/${ticketId}`, {
     method: "DELETE",
   })

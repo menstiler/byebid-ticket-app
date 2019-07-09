@@ -14,7 +14,8 @@ class PurchasesController < ApplicationController
   end
 
   def destroy
-    purchase = Purchase.find_by(ticket_id: params[:id])
+    # byebug
+    purchase = Purchase.find_by(ticket_id: params[:ticket_id])
     purchase.delete
   end
 

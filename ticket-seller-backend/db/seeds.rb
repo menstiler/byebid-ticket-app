@@ -13,7 +13,7 @@ puts 'end'
 
 puts 'creating tickets'
 Ticket.create(title: 'Shweaky Concert', category: 'Concerts', location: 'Madison square gardin', min_price: 10, buy_now: 50, seller_id: nil, time: 'Tuesday, 6 pm', status: true)
-Ticket.create(title: 'Spiderman', category: 'Movies', location: 'AMC', min_price: 10, buy_now: 50, seller_id: nil, time: 'Mondsy, 10 pm', status: true)
+Ticket.create(title: 'Spiderman', category: 'Movies', location: 'AMC', min_price: 10, buy_now: 50, seller_id: nil, time: 'Monday, 10 pm', status: true)
 Ticket.create(title: 'Yankees - Baseball', category: 'Sports', location: 'Yankee Stadium', min_price: 15, buy_now: 70, seller_id: nil, time: 'Sunday, 6 pm', status: true)
 puts 'end'
 
