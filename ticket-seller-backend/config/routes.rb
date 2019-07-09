@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :bids
   get '/users/:username' => "users#show"
   
   resources :purchases

@@ -22,3 +22,9 @@ Purchase.create(user: User.first, ticket: Ticket.first, seller_id: Ticket.first.
 Purchase.create(user: User.last, ticket: Ticket.last, seller_id: Ticket.last.seller_id, price: 70 )
 Purchase.create(user: User.last, ticket: Ticket.find(2), seller_id: Ticket.find(2).seller_id, price: 100 )
 puts 'end'
+
+puts 'creating bids'
+Bid.create(user: User.first, ticket: Ticket.first, price: 10)
+Bid.create(user: User.last, ticket: Ticket.last, price: 25)
+Bid.create(user: User.last, ticket: Ticket.find(2), price: 15)
+puts 'end'
