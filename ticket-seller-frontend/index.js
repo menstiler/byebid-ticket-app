@@ -1,6 +1,7 @@
 const loginDiv = document.querySelector("#login")
 const mainCategoryContainer = document.querySelector("#main-column")
 let ticketContainer = document.querySelector('#tickets-list')
+const bidForm = document.querySelector('#ticket-form')
 const ticketsUrl = "http://localhost:3000/tickets"
 const usersUrl = "http://localhost:3000/users"
 const ticketInfo = document.querySelector('#ticket-info')
@@ -25,7 +26,7 @@ loginDiv.addEventListener('click', function(e) {
   if (e.target.innerText === 'Login') {
     loginDiv.innerHTML = `
     <div class='row'>
-    <div class="input-field col s6">
+    <div class="input-field col">
       <input type='text' id="username" value="" name="" placeholder="Username">
       <button type="submit" id='login-confirm' class='waves-effect waves-light btn'>Login</button>
     </div>
@@ -62,7 +63,7 @@ function loginPost(loginBtn) {
       currentUser = user
       loggedIn()
       navBarContainer.innerHTML = `
-      <li>${currentUser.name}</li>
+      <a href="">${currentUser.name}</a>
       `
     })
   })
@@ -71,6 +72,7 @@ function loginPost(loginBtn) {
 function loggedIn() {
   loginDiv.style.display = "none"
   fetchAllTicket()
+  addEventListeners()
 }//login verifictaion
 
 function signUpPost(signupBtn) {
@@ -95,7 +97,7 @@ function signUpPost(signupBtn) {
       currentUser = user
       loggedIn()
       navBarContainer.innerHTML = `
-      <li>${currentUser.name}</li>
+      <a href="">${currentUser.name}</a>
       `
     })
   })
@@ -103,15 +105,16 @@ function signUpPost(signupBtn) {
 
 function fetchAllTicket(){
   fetch(ticketsUrl)
-  .then(r=> r.json())
+  .then(r => r.json())
   .then(json => {
     json.forEach(ticket => ticketArray.push(ticket))
   })
 }//fetch of all the tickets
 
 function renderTicket(element) {
+  ticketContainer.classList = "collection"
   ticketContainer.innerHTML += `
-  <li data-id=${element.id}>${element.title}</li>
+  <a data-id=${element.id} class="collection-item">${element.title}</a>
   `
 }//render all tickets
 
@@ -124,56 +127,58 @@ function filterArray(category) {
   })
 }// filtered tickets
 
-mainCategoryContainer.addEventListener("click", event => {
-  switch(event.target.innerText) {
-  case "Movies":
-    filterArray("Movies")
-    break;
+function addEventListeners() {
+  mainCategoryContainer.addEventListener("click", event => {
+    switch(event.target.innerText) {
+    case "Movies":
+      filterArray("Movies")
+      break;
 
-  case "Concerts":
-    filterArray("Concerts")
-    break;
-  case "My Tickets":
-    fetch(`http://localhost:3000/users/${currentUser.username}`)
-    .then(r => r.json())
-    .then(user => user.tickets)
-    .then(tickets => {
-      ticketContainer.innerHTML=`
-      My Tickets
-      <hr>`
-      tickets.forEach(ticket => {
-        renderTicket(ticket)})
-    })
-    break;
+    case "Concerts":
+      filterArray("Concerts")
+      break;
+    case "My Tickets":
+      fetch(`http://localhost:3000/users/${currentUser.username}`)
+      .then(r => r.json())
+      .then(user => user.tickets)
+      .then(tickets => {
+        ticketContainer.innerHTML=`
+        <h6 class="centered">My Tickets</h6>
+        <div class="divider"></div>`
+        tickets.forEach(ticket => {
+          renderTicket(ticket)})
+      })
+      break;
 
-  case "Sports":
-    filterArray("Sports")
-    break;
+    case "Sports":
+      filterArray("Sports")
+      break;
 
-  case "All Tickets":
-    let filteredArray = ticketArray.filter(ticket => ticket.status === true)
-    ticketContainer.innerHTML=""
-      filteredArray.forEach(ticket => {
-        renderTicket(ticket)
-       })
-    break;
+    case "All Tickets":
+      let filteredArray = ticketArray.filter(ticket => ticket.status === true)
+      ticketContainer.innerHTML=""
+        filteredArray.forEach(ticket => {
+          renderTicket(ticket)
+         })
+      break;
 
-      case "Add Ticket":
-        ticketInfo.innerHTML=`
-        <form>
-          <input type='text' value="" name="" placeholder="Title">
-          <input type='text' value="" name="" placeholder="Category">
-          <input type='text' value="" name="" placeholder="Location">
-          <input type='text' value="" name="" placeholder="Time">
-          <input type='text' value="" name="" placeholder="Min Price">
-          <input type='text' value="" name="" placeholder="Buy Now">
-          <button type="submit" id='add-ticket'>Add Ticket</button>
-        </form>
-        `
-        break;
-  default:
-}
-})//Event listener fo main container
+    case "Add Ticket":
+      ticketInfo.innerHTML=`
+      <form >
+        <input type='text' value="" name="" placeholder="Title">
+        <input type='text' value="" name="" placeholder="Category">
+        <input type='text' value="" name="" placeholder="Location">
+        <input type='text' value="" name="" placeholder="Time">
+        <input type='text' value="" name="" placeholder="Min Price">
+        <input type='text' value="" name="" placeholder="Buy Now">
+        <button type="submit" id='add-ticket' class='waves-effect waves-light btn'>Add Ticket</button>
+      </form>
+      `
+      break;
+    // default:
+  }
+  })
+}//Event listener fo main container
 
 ticketContainer.addEventListener('click', function(e) {
   if (e.target.dataset.id) {
@@ -188,6 +193,8 @@ ticketContainer.addEventListener('click', function(e) {
 })//event listener for tickets container/ FETCHING ticket data
 
 function showTicket(ticket) {
+  ticketInfo.classList = "card col s12 m7"
+
   ticketInfo.innerHTML = `
     <p>${ticket.title}</p>
     <p>${ticket.category}</p>
@@ -197,8 +204,8 @@ function showTicket(ticket) {
   `
   if (ticket.status) {
     ticketInfo.innerHTML +=  `
-    <button id='btn-buy' data-id=${ticket.id}>Buy Now for $${ticket.buy_now}</button>
-    <button id='btn-bid' data-id=${ticket.id}>Bid</button>
+    <button id='btn-buy' data-id=${ticket.id} class='waves-effect waves-light btn'>Buy Now for $${ticket.buy_now}</button>
+    <button id='btn-bid' data-id=${ticket.id} class='waves-effect waves-light btn'>Bid</button>
     `
   }
 }// render the ticket info
@@ -206,8 +213,54 @@ function showTicket(ticket) {
 ticketInfo.addEventListener('click', function(e) {
   if (e.target.id === "btn-buy") {
     buyNow(e)
+  } else if (e.target.id === "btn-bid") {
+    bidInput(e)
+    // placeBid(e)
   }
 })// listener buttons for buying tickets
+
+function bidInput(e) {
+  const ticketId = e.target.dataset.id
+  let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
+  bidForm.innerHTML =  `
+  <input type='number' value="" name="" placeholder="Bid">
+  <button id='btn-bid' data-id=${ticketId} class='waves-effect waves-light btn' >Place Bid</button>
+  `
+}
+
+bidForm.addEventListener('click', e => {
+  if (e.target.id === 'btn-bid') {
+    let input = e.target.previousElementSibling.value
+    placeBid(e, input)
+  }
+})
+
+function placeBid(e, input) {
+  const ticketId = e.target.dataset.id
+  let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
+  // listen for bid input value
+  // make sure input value is higher than min price
+  console.log(currentUser);
+  console.log(currentTicket);
+  fetch("http://localhost:3000/bids", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      user_id: currentUser.id,
+      ticket_id: currentTicket.id,
+      price: input,
+    })
+  })
+  .then(resp => resp.json())
+  .then(json => {
+    // ticketInfo.innerHTML = `Purchased!`
+    // removeTicket(ticketId, ticketObj)
+    console.log(json)
+  })
+}
 
 function removeTicket(ticket, ticketObj) {
   const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`)

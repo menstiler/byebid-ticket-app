@@ -1,9 +1,6 @@
 class Ticket < ApplicationRecord
   has_many :purchases
+  has_many :bids
 
 
-  def owner
-    self.purchases.first.user
-  end
-  
 end
