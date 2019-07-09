@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2019_07_09_135409) do
     t.integer "seller_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "timer"
+    t.string "date"
   end
 
   create_table "users", force: :cascade do |t|
