@@ -2,7 +2,7 @@ class TicketsController < ApplicationController
   def index
 
     Ticket.all.each do |ticket|
-      if "#{ticket.date} #{ticket.time}" >  Time.now()
+      if "#{ticket.date} #{ticket.time}" > Time.now()
         ticket.update(status: true)
       else
         ticket.update(status: false)
