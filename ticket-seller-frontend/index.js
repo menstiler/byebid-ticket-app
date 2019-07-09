@@ -292,7 +292,7 @@ function showTicket(ticket) {
     <p>${ticket.location}</p>
     <p>Date ${ticket.date}</p>
     <p>Time ${time}</p>
-    <p>${ticketBidPrice}</p>
+    <p id="min_price-field">${ticketBidPrice}</p>
   `
   let ticketBids = ticket.bids
   bidsContainer.innerHTML = `<h6>Bids</h6>`
@@ -390,7 +390,23 @@ function updateMinPrice(json, input) {
   let bidTicket = ticketArray.findIndex(function(ticket) {
     return ticket.title === `${json.ticket.title}`
   })
+  debugger
+  ticketInfo.querySelector('#min_price-field').innerHTML = input
   ticketArray[bidTicket].min_price = input
+  patchMinPrice(json, input)
+}
+
+function patchMinPrice(json, input) {
+  fetch(`${ticketsUrl}/${json.ticket.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      min_price: input
+    })
+  })
 }
 
 function addBidToTicket(bid) {
