@@ -15,7 +15,7 @@ const ticketForm = document.querySelector("#add-ticket")
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
-      <button type="submit" class='btn-step1 waves-effect waves-light btn'>Login</button>
+      <button type="submit" class='btn-step1 waves-effect waves-light btn login'>Login</button>
       <button type="submit" class='btn-step1 waves-effect waves-light btn'>Sign up</button>
   `
 })//End of domcontent loading
@@ -182,20 +182,20 @@ function addEventListeners() {
         <button type="submit" id='add-ticket' class='waves-effect waves-light btn'>Add Ticket</button>
       </form>
       `
-      const addTicketForm = document.getElementById("add-ticket-form")
+      // const addTicketForm = document.getElementById("add-ticket-form")
 
-      addTicketForm.addEventListener('submit', (e) => {
-        e.preventDefault()
-        console.log(e.target);
-        let date = `${e.target[3].value}`
-        let timeInfo = `${e.target[4].value}`
-        if (e.target.id === "add-ticket-form") {
-          postNewTicket(e,date,timeInfo)
-        } else if (e.target.id === "sell-ticket-form") {
-          // console.log("Sell", e.target);
-          sellTicket(e)
-        }
-      })
+      // addTicketForm.addEventListener('submit', (e) => {
+      //   e.preventDefault()
+      //   console.log(e.target);
+      //   let date = `${e.target[3].value}`
+      //   let timeInfo = `${e.target[4].value}`
+      //   if (e.target.id === "add-ticket-form") {
+      //     postNewTicket(e,date,timeInfo)
+      //   } else if (e.target.id === "sell-ticket-form") {
+      //     // console.log("Sell", e.target);
+      //     sellTicket(e)
+      //   }
+      // })
       break;
     // default:
   }
@@ -336,7 +336,7 @@ ticketInfo.addEventListener('click', function(e) {
     buyNow(e)
   } else if (e.target.id === "btn-bid") {
     bidInput(e)
-  } else if (e.target.id == "btn-sell") {
+  } else if (e.target.id === "btn-sell") {
     sellTicketForm(e)
   }
 })// listener buttons for buying tickets
@@ -412,6 +412,7 @@ function changeTicketStatus(ticket, ticketObj) {
     debugger
     ticketArray[index].status = false
   } else {
+    ticketLi.remove()
     debugger
     ticketArray[index].status = true
   }
@@ -440,20 +441,20 @@ fetch("http://localhost:3000/purchases", {
 })}
 
 
-// ticketInfo.addEventListener('click', (e) => {
-//   e.preventDefault()
-//   console.log(e.target);
-//   let date = `${e.target[3].value}`
-//   let timeInfo = `${e.target[4].value}`
-//   if (e.target.id === "add-ticket-form") {
-//     console.log("IVE BEEN CLICKED", e.target);
-//     // postNewTicket(e,date,timeInfo)
-//   } else if (e.target.id === "sell-ticket-form") {
-//     console.log("Sell", e.target);
-//     // sellTicket(e)
-//   }
-// })
-
+ticketInfo.addEventListener('submit', (e) => {
+  e.preventDefault()
+  console.log(e.target);
+  let date = `${e.target[3].value}`
+  let timeInfo = `${e.target[4].value}`
+  if (e.target.id === "add-ticket-form") {
+    console.log("IVE BEEN CLICKED", e.target);
+    postNewTicket(e,date,timeInfo)
+  } else if (e.target.id === "sell-ticket-form") {
+    console.log("Sell", e.target);
+    sellTicket(e)
+  }
+})
+//
 // addTicketForm.addEventListener('submit', (e) => {
 //   e.preventDefault()
 //   console.log(e.target);
@@ -461,10 +462,10 @@ fetch("http://localhost:3000/purchases", {
 //   let timeInfo = `${e.target[4].value}`
 //   if (e.target.id === "add-ticket-form") {
 //     console.log("IVE BEEN CLICKED", e.target);
-//     // postNewTicket(e,date,timeInfo)
+//     postNewTicket(e,date,timeInfo)
 //   } else if (e.target.id === "sell-ticket-form") {
 //     console.log("Sell", e.target);
-//     // sellTicket(e)
+//     sellTicket(e)
 //   }
 // })
 
@@ -497,6 +498,7 @@ function sellTicket(e) {
 }
 
 function deletePurchase(ticketId) {
+  debugger
   fetch(`http://localhost:3000/purchases/${ticketId}`, {
     method: "DELETE",
   })

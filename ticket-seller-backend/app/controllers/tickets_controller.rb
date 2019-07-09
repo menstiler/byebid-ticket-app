@@ -22,12 +22,13 @@ class TicketsController < ApplicationController
 
   def create
     ticket = Ticket.create(ticket_params)
-    if "#{ticket.date} #{ticket.time}" >  Time.now()
+    if "#{ticket.date} #{ticket.time}" > Time.now()
       ticket.update(status: true)
+      render json: ticket
     else
       ticket.update(status: false)
+      render json: ticket
     end
-    render json: ticket
   end
 
   def destroy
