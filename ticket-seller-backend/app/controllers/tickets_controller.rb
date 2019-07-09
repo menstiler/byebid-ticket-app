@@ -1,6 +1,17 @@
 class TicketsController < ApplicationController
   def index
-    tickets = Ticket.all
+
+    Ticket.all.each do |ticket|
+      if "#{ticket.date} #{ticket.time}" >  Time.now()
+        ticket.update(status: true)
+      else
+        ticket.update(status: false)
+      end
+    end
+
+    tickets = Ticket.all.select do |ticket|
+      ticket.status
+    end
     render json: tickets
   end
 
@@ -11,7 +22,11 @@ class TicketsController < ApplicationController
 
   def create
     ticket = Ticket.create(ticket_params)
-    ticket.update(status: true)
+    if "#{ticket.date} #{ticket.time}" >  Time.now()
+      ticket.update(status: true)
+    else
+      ticket.update(status: false)
+    end
     render json: ticket
   end
 
@@ -29,6 +44,6 @@ class TicketsController < ApplicationController
   private
 
   def ticket_params
-    params.require(:ticket).permit(:title, :location, :time, :category, :min_price, :buy_now, :status, :seller_id)
+    params.require(:ticket).permit(:title, :location, :time, :category, :min_price, :buy_now, :status, :seller_id, :date)
   end
 end

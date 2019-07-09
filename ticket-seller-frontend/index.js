@@ -107,7 +107,9 @@ function fetchAllTicket(){
   fetch(ticketsUrl)
   .then(r => r.json())
   .then(json => {
-    json.forEach(ticket => ticketArray.push(ticket))
+    json.forEach(ticket => {
+      ticketArray.push(ticket)
+    })
   })
 }//fetch of all the tickets
 
@@ -166,11 +168,19 @@ function addEventListeners() {
       ticketInfo.innerHTML=`
       <form >
         <input type='text' value="" name="" placeholder="Title">
-        <input type='text' value="" name="" placeholder="Category">
+        Category
+        <select style="display: block" name="Category">
+          <option value="Movies">Movies</option>
+          <option value="Concerts">Concerts</option>
+          <option value="Sports">Sports</option>
+        </select>
         <input type='text' value="" name="" placeholder="Location">
-        <input type='text' value="" name="" placeholder="Time">
-        <input type='text' value="" name="" placeholder="Min Price">
-        <input type='text' value="" name="" placeholder="Buy Now">
+        Date:
+        <input type="date" name="bday">
+        Time
+        <input id="appt-time" type="time">
+        <input type='number' value="" name="" placeholder="Min Price">
+        <input type='number' value="" name="" placeholder="Buy Now">
         <button type="submit" id='add-ticket' class='waves-effect waves-light btn'>Add Ticket</button>
       </form>
       `
@@ -187,20 +197,31 @@ ticketContainer.addEventListener('click', function(e) {
     .then(response => response.json())
     .then(json => {
       currentTicket = json
-      showTicket(json)
+        showTicket(json)
+
     })
   }
 })//event listener for tickets container/ FETCHING ticket data
 
 function showTicket(ticket) {
   ticketInfo.classList = "card col s12 m7"
-
+  ticketBidPrice = ticket.min_price
+  let twenty4HrTime = `${ticket.time}`.split(":")
+  let parsedTime = parseInt(twenty4HrTime[0])
+  let time = ""
+  if (parsedTime < 12){
+    time = `${twenty4HrTime[0]}:${twenty4HrTime[1]} AM`
+  }
+  else if (parsedTime > 12){
+    time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
+  }
   ticketInfo.innerHTML = `
     <p>${ticket.title}</p>
     <p>${ticket.category}</p>
     <p>${ticket.location}</p>
-    <p>${ticket.time}</p>
-    <p>${ticket.min_price}</p>
+    <p>Date ${ticket.date}</p>
+    <p>Time ${time}</p>
+    <p>${ticketBidPrice}</p>
   `
   if (ticket.status) {
     ticketInfo.innerHTML +=  `
@@ -209,6 +230,20 @@ function showTicket(ticket) {
     `
   }
 }// render the ticket info
+
+// function ticketTimer(timerAmount){
+//
+//   let timer = new Timer();
+// timer.start({countdown: true, startValues: {seconds: timerAmount}});
+// $('#countdownExample .values').html(timer.getTimeValues().toString());
+// timer.addEventListener('secondsUpdated', function (e) {
+//     $('#countdownExample .values').html(timer.getTimeValues().toString());
+// });
+// timer.addEventListener('targetAchieved', function (e) {
+//     $('#countdownExample .values').html('KABOOM!!');
+// });
+// }
+
 
 ticketInfo.addEventListener('click', function(e) {
   if (e.target.id === "btn-buy") {
@@ -296,15 +331,25 @@ fetch("http://localhost:3000/purchases", {
 
 ticketInfo.addEventListener('submit', e=>{
   e.preventDefault()
-  console.log (e.target[0])
+  let date = `${e.target[3].value}`
+  let timeInfo = `${e.target[4].value}`
+  // let comparingTime = Date.parse(`${date} ${timeInfo}`)
+  // if (comparingTime > Date.now()) {
+  //   let status = true
+  // }
+  // else
+  // {
+  //   let status = false
+  // }
   let formInput = {
     title: e.target[0].value,
     category: e.target[1].value,
     location: e.target[2].value,
-    time: e.target[3].value,
-    min_price: e.target[4].value,
-    buy_now: e.target[5].value
-
+    time: timeInfo,
+    min_price: e.target[5].value,
+    buy_now: e.target[6].value,
+    date: date,
+    status: true
   }
   fetch(ticketsUrl, {
     method: "POST",
@@ -315,5 +360,9 @@ ticketInfo.addEventListener('submit', e=>{
     body: JSON.stringify(formInput)
   })
   .then(response => response.json())
-  .then(json => ticketArray.push(json))
-})
+  .then(json => {
+    console.log(json)
+    ticketArray.push(json)
+  })
+ }
+)
