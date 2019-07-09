@@ -23,6 +23,7 @@ class TicketsController < ApplicationController
   def update
     ticket = Ticket.find(params[:id])
     ticket.update(ticket_params)
+    ticket.update(status: true)
     render json: ticket
   end
 
