@@ -272,6 +272,8 @@ function showTicket(ticket) {
   let ticketBids = ticket.bids
   if (ticket.bids.length > 0) {
     bidsContainer.innerHTML = `<h6>Bids</h6>`
+  } else {
+    bidsContainer.innerHTML = ""
   }
   ticketBids.forEach(ticketBid => {
     bidsContainer.innerHTML += `
