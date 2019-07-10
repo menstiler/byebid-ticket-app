@@ -328,7 +328,10 @@ function placeBid(e, input) {
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
   // make sure input value is higher than min price
   debugger
-  if (input < parseInt(ticketObj.min_price)) {
+  if ((ticketObj.bids.length > 0) && (input <= parseInt(ticketObj.min_price))) {
+    const alertTag = bidForm.querySelector('#input-alert')
+    alertTag.innerHTML = `Amount must be higher than $${ticketObj.min_price}`
+  } else if (input <= parseInt(ticketObj.min_price)) {
     const alertTag = bidForm.querySelector('#input-alert')
     alertTag.innerHTML = `Amount must be higher than $${ticketObj.min_price}`
   } else {
