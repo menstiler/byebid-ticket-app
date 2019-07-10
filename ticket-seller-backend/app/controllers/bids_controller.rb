@@ -2,7 +2,7 @@ class BidsController < ApplicationController
 
   def index
     bids = Bid.all
-    render json: bids 
+    render json: bids
   end
 
   def show
@@ -15,8 +15,8 @@ class BidsController < ApplicationController
     render json: bid
   end
 
-  def destory
-    bid = Bid.find(params[:id])
+  def destroy
+    bid = Bid.find_by(ticket_id: params[:ticket_id])
     bid.delete
   end
 

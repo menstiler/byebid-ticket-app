@@ -12,9 +12,9 @@ User.create(name: 'David', username: 'rami', cash: nil, email: 'ramigreenspan@gm
 puts 'end'
 
 puts 'creating tickets'
-Ticket.create(title: 'Shweaky Concert', category: 'Concerts', location: 'Madison square gardin', min_price: 10, buy_now: 50, seller_id: nil, date: "12/4/2022",  time: 'Tuesday, 6 pm', status: true)
-Ticket.create(title: 'Spiderman', category: 'Movies', location: 'AMC', min_price: 10, buy_now: 50, seller_id: nil, time: 'Monday, 10 pm',date: "12/4/2022", status: true)
-Ticket.create(title: 'Yankees - Baseball', category: 'Sports', location: 'Yankee Stadium', min_price: 15, buy_now: 70, seller_id: nil, time: 'Sunday, 6 pm',date: "12/4/2022", status: true)
+Ticket.create(title: 'Shweaky Concert', category: 'Concerts', location: 'Madison square gardin', min_price: 10, buy_now: 50, seller_id: nil, date: "12/4/2022",  time: '10:10', status: true)
+Ticket.create(title: 'Spiderman', category: 'Movies', location: 'AMC', min_price: 10, buy_now: 50, seller_id: nil, time: '10:10', date: "12/4/2022", status: true)
+Ticket.create(title: 'Yankees - Baseball', category: 'Sports', location: 'Yankee Stadium', min_price: 15, buy_now: 70, seller_id: nil, time: '10:10',date: "12/4/2022", status: true)
 puts 'end'
 
 # puts 'creating purchases'

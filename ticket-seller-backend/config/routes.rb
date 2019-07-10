@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :bids
   get '/users/:username' => "users#show"
+  get '/tickets/all' => "tickets#all_tickets"
   delete '/purchases/:ticket_id' => "purchases#destroy"
+  delete '/bids/:ticket_id' => "bids#destroy"
 
+  resources :bids
   resources :purchases
   resources :tickets
   resources :users

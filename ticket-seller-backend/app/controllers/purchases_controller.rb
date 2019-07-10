@@ -2,9 +2,6 @@ class PurchasesController < ApplicationController
 
   def create
     purchase = Purchase.create(purchase_params)
-    ticket = Ticket.find(params[:ticket_id])
-    ticket.update(status: false)
-    ticket.update(seller_id: params[:seller_id])
     render json: purchase
   end
 
@@ -14,7 +11,6 @@ class PurchasesController < ApplicationController
   end
 
   def destroy
-    # byebug
     purchase = Purchase.find_by(ticket_id: params[:ticket_id])
     purchase.delete
   end
