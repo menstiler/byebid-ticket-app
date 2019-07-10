@@ -12,6 +12,7 @@ let currentUser
 const navBarContainer = document.querySelector("#nav-mobile")
 let currentTicket
 const ticketForm = document.querySelector("#add-ticket")
+const ticketFloat = document.querySelector("#ticketInfoFloat")
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
@@ -213,10 +214,31 @@ function sellTicketForm(e) {
 
 }
 
-function renderTicket(element) {
+function renderTicket(ticket) {
+      let twenty4HrTime = `${ticket.time}`.split(":")
+      let parsedTime = parseInt(twenty4HrTime[0])
+      let time = ""
+      if (parsedTime < 12){
+        time = `${twenty4HrTime[0]}:${twenty4HrTime[1]} AM`
+      }
+      else if (parsedTime > 12){
+        time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
+      }
   ticketContainer.classList = "collection"
   ticketContainer.innerHTML += `
-  <a data-id=${element.id} class="collection-item">${element.title}</a>
+   <div class="card horizontal" >
+      <div class="card-image">
+        <img src="https://lorempixel.com/100/190/nature/6" style="height:150px;">
+      </div>
+      <div class="card-stacked">
+        <div class="card-content" data-id= ${ticket.id}>
+        <h6 class="header" data-id= ${ticket.id}>${ticket.title}</h6>
+          <p data-id= ${ticket.id}>Date ${ticket.date}</p>
+          <p data-id= ${ticket.id}>Location ${ticket.location}</p>
+          <p data-id= ${ticket.id}>Time ${time}</p>
+        </div>
+      </div>
+    </div>
   `
 }//render all tickets
 
@@ -236,6 +258,7 @@ function fetchUserTickets() {
 
 ticketContainer.addEventListener('click', function(e) {
   if (e.target.dataset.id) {
+    ticketFloat.style.display = "none"
     const ticketId = e.target.dataset.id
     fetch(`${ticketsUrl}/${ticketId}`)
     .then(response => response.json())
@@ -518,3 +541,44 @@ function postNewTicket(e,date,timeInfo) {
     body.innerHTML = `<image src=${json.image} />`
   })
 }
+
+// ticketContainer.addEventListener("mouseover",e=> {
+//   if(e.target.innerText){
+//     ticket = ticketArray.find(ticket => ticket.title === e.target.innerText)
+//     let twenty4HrTime = `${ticket.time}`.split(":")
+//     let parsedTime = parseInt(twenty4HrTime[0])
+//     let time = ""
+//     if (parsedTime < 12){
+//       time = `${twenty4HrTime[0]}:${twenty4HrTime[1]} AM`
+//     }
+//     else if (parsedTime > 12){
+//       time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
+//     }
+//     ticketFloat.style.display = ""
+//     ticketInfo.style.display = "none"
+//     bidsContainer.style.display = "none"
+//     ticketFloat.innerHTML = `
+    // <div class="card horizontal">
+    //   <div class="card-image">
+    //     <img src="https://lorempixel.com/100/190/nature/6">
+    //   </div>
+    //   <div class="card-stacked">
+    //     <div class="card-content">
+    //     <h4 class="header">${ticket.title}</h4>
+    //       <p>Date ${ticket.date}</p>
+    //       <p>Location ${ticket.location}</p>
+    //       <p>Time ${time}</p>
+    //     </div>
+    //   </div>
+    // </div>
+//   `
+//   }
+// })
+//
+// ticketContainer.addEventListener("mouseout",e=> {
+//   if(e.target.innerText){
+//     ticketFloat.innerHTML = ``
+//     ticketInfo.style.display = ""
+//     bidsContainer.style.display = ""
+//   }
+// })

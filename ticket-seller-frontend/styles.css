@@ -11,3 +11,33 @@ footer {
 .page-footer {
   padding-top:0px
 }
+
+.card {
+  margin: -0.5rem 0 1rem 0;
+}
+
+.card .card-content {
+    padding: 7px;
+    border-radius: 0 0 2px 2px;
+}
+
+.collection {
+      border: 1px solid #fff;
+}
+#ticket-container {
+  padding: 0;
+}
+
+/*
+#ticket-container {
+  width: 56%;
+  position: absolute;
+  top: 6%;
+  z-index: -10;
+}
+#ticketInfoFloat {
+width: 51%;
+position: absolute;
+top: 6%;
+padding: 7px;
+} */
