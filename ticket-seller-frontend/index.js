@@ -260,30 +260,31 @@ function filterArray(category) {
 
 function addEventListeners() {
   mainCategoryContainer.addEventListener("click", event => {
+    console.log(event.target.innerText);
     switch(event.target.innerText) {
-    case "Movies":
+    case "Moviesmovie":
       filterArray("Movies")
       break;
 
-    case "Concerts":
+    case "Concertslibrary_music":
       filterArray("Concerts")
       break;
-    case "My Tickets":
+    case "My Ticketsaccount_balance_wallet":
       fetchUserTickets()
       break;
 
-    case "Sports":
+    case "Sportsbrightness_1":
       filterArray("Sports")
       break;
 
-    case "All Tickets":
+    case "All Ticketsformat_align_justify":
       let filteredArray = ticketArray.filter(ticket => ticket.status === true)
       ticketContainer.innerHTML=""
         filteredArray.forEach(ticket => {
           renderTicket(ticket)
          })
       break;
-    case "Add Ticket":
+    case "Add Ticketadd":
       addTicket()
       break;
     }

@@ -57,3 +57,11 @@ footer {
     height: 79px;
     object-fit: cover;
 }
+
+.nav-wrapper {
+  background-color: cadetblue;
+}
+.page-footer {
+    padding-top: 0px;
+    background-color: cadetblue;
+}
