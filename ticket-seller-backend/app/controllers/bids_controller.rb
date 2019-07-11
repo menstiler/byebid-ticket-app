@@ -16,8 +16,15 @@ class BidsController < ApplicationController
   end
 
   def destroy
-    bid = Bid.find_by(ticket_id: params[:ticket_id])
-    bid.delete
+    # bid = Bid.find_by(ticket_id: params[:ticket_id])
+    bids = Bid.all.select do |bid|
+      # byebug
+      bid.ticket_id == params[:ticket_id].to_i
+    end
+    # byebug
+    bids.each do |bid|
+      bid.delete
+    end
   end
 
   private

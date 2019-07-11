@@ -19,6 +19,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def find_by_id
+    user = User.find(params[:id])
+    if user
+      render json: user, status: :ok
+    else
+      render json: {status: "error", code: 422, message: "user not found" }
+    end
+  end
+
   def destroy
     user = User.find(params[:id])
     user.delete

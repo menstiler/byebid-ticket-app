@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  get '/users/:username' => "users#show"
+  get '/users/username/:username' => "users#show"
+  get '/users/:id' => "users#find_by_id"
   get '/tickets/all' => "tickets#all_tickets"
   delete '/purchases/:ticket_id' => "purchases#destroy"
   delete '/bids/:ticket_id' => "bids#destroy"

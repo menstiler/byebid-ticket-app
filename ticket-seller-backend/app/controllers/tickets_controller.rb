@@ -2,7 +2,17 @@ class TicketsController < ApplicationController
   def index
     Ticket.all.each do |ticket|
       if ticket.status
-        if "#{ticket.date} #{ticket.time}" < Time.now()
+        ticket = Ticket.new(ticket_params)
+        ticket.time = "#{ticket.time}:00"
+        original_time = Time.now().to_s
+        original_time_split = original_time.split(" ")
+        time_split = original_time_split[1]
+        date_split = original_time_split[0]
+        if ticket.date == date_split
+          if ticket.time < time_split
+            ticket.update(status: false)
+          end
+        else ticket.date < date_split
           ticket.update(status: false)
         end
       end
@@ -15,6 +25,25 @@ class TicketsController < ApplicationController
   end
 
   def all_tickets
+    Ticket.all.each do |ticket|
+      if ticket.status
+        ticket.time = "#{ticket.time}:00"
+        original_time = Time.now().to_s
+        original_time_split = original_time.split(" ")
+        time_split = original_time_split[1]
+        date_split = original_time_split[0]
+        # if user_date == date_split
+        #   if ticket.time > time_split
+        #     ticket.update(status: false)
+        #   end
+        # elsif user_date < date_split
+        #   ticket.update(status: false)
+        # end
+        if (ticket.date == date_split && ticket.time <= time_split) || ticket.date < date_split
+          ticket.update(status: false)
+        end
+      end
+    end
     tickets = Ticket.all
     render json: tickets
   end
@@ -25,13 +54,26 @@ class TicketsController < ApplicationController
   end
 
   def create
-    ticket = Ticket.create(ticket_params)
-    if "#{ticket.date} #{ticket.time}" > Time.now()
+    ticket = Ticket.new(ticket_params)
+    ticket.time = "#{ticket.time}:00"
+    original_time = Time.now().to_s
+    original_time_split = original_time.split(" ")
+    time_split = original_time_split[1]
+    date_split = original_time_split[0]
+    if ticket.date == date_split
+      if ticket.time > time_split
+        ticket.save
+        ticket.update(status: true)
+        render json: {ticket: ticket, status: 200, message: "Ticket is now available for purchase!" }
+      else
+        render json: {message: "error!", status: 403}
+      end
+    elsif ticket.date > date_split
+      ticket.save
       ticket.update(status: true)
-      render json: ticket
+      render json: {ticket: ticket, status: 200, message: "Ticket is now available for purchase!" }
     else
-      ticket.update(status: false)
-      render json: ticket
+      render json: {message: "error!", status: 403}
     end
   end
 
@@ -49,6 +91,6 @@ class TicketsController < ApplicationController
   private
 
   def ticket_params
-    params.require(:ticket).permit(:title, :image, :location, :time, :category, :min_price, :buy_now, :status, :seller_id, :date)
+    params.require(:ticket).permit(:title, :image_url, :location, :time, :category, :min_price, :buy_now, :status, :seller_id, :date)
   end
 end

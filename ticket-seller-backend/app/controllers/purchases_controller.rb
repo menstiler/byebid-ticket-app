@@ -1,6 +1,7 @@
 class PurchasesController < ApplicationController
 
   def create
+    # byebug
     purchase = Purchase.create(purchase_params)
     render json: purchase
   end

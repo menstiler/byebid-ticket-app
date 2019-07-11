@@ -11,3 +11,16 @@ footer {
 .page-footer {
   padding-top:0px
 }
+
+#add-ticket-form #image-container img {
+    max-width: 250px;
+    height: 175px;
+    object-fit: cover;
+}
+
+#ticket-info img {
+    object-fit: cover;
+    height: 131px;
+    width: 100%;
+    object-position: center;
+}

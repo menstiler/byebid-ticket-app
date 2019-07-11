@@ -12,9 +12,9 @@ User.create(name: 'David', username: 'rami', cash: nil, email: 'ramigreenspan@gm
 puts 'end'
 
 puts 'creating tickets'
-Ticket.create(title: 'Shweaky Concert', category: 'Concerts', location: 'Madison square gardin', min_price: 10, buy_now: 50, seller_id: nil, date: "12/4/2022",  time: '10:10', status: true)
-Ticket.create(title: 'Spiderman', category: 'Movies', location: 'AMC', min_price: 10, buy_now: 50, seller_id: nil, time: '10:10', date: "12/4/2022", status: true)
-Ticket.create(title: 'Yankees - Baseball', category: 'Sports', location: 'Yankee Stadium', min_price: 15, buy_now: 70, seller_id: nil, time: '10:10',date: "12/4/2022", status: true)
+Ticket.create(title: 'Shweaky Concert', image_url: "https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500", category: 'Concerts', location: 'Madison square gardin', min_price: 10, buy_now: 50, seller_id: nil, date: "2019-07-10",  time: '23:10', status: true)
+Ticket.create(title: 'Spiderman', image_url: "http://cdn.amreading.com/wp-content/uploads/636054008085485119871913223_Movies.jpg", category: 'Movies', location: 'AMC', min_price: 10, buy_now: 50, seller_id: nil, time: '23:10', date: "2019-07-10", status: true)
+Ticket.create(title: 'Yankees - Baseball', image_url: "https://s.abcnews.com/images/International/yankees-red-sox-london-ap-jt-190629_hpMain_16x9_608.jpg", category: 'Sports', location: 'Yankee Stadium', min_price: 15, buy_now: 70, seller_id: nil, time: '23:10',date: "2019-07-10", status: true)
 puts 'end'
 
 # puts 'creating purchases'

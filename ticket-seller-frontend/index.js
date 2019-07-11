@@ -12,6 +12,23 @@ let currentUser
 const navBarContainer = document.querySelector("#nav-mobile")
 let currentTicket
 const ticketForm = document.querySelector("#add-ticket")
+const ticketImages = {
+  Concerts: [
+    "https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    "https://musicoomph.com/wp-content/uploads/2018/03/benefits-of-going-to-live-music-concerts.jpg",
+    "https://eevents.s3.amazonaws.com/images/og/concert.jpg"
+  ],
+  Movies: [
+    "http://cdn.amreading.com/wp-content/uploads/636054008085485119871913223_Movies.jpg",
+    "https://cdn.mos.cms.futurecdn.net/PBpaPfht3TSS2rSg5ezHE-480-80.jpg",
+    "https://bloximages.newyork1.vip.townnews.com/kmov.com/content/tncms/assets/v3/editorial/c/27/c27ad91e-3b81-11e9-9e30-5fc881c4286b/5c78202b0caba.image.jpg?resize=400%2C266"
+  ],
+  Sports: [
+    "https://s.abcnews.com/images/International/yankees-red-sox-london-ap-jt-190629_hpMain_16x9_608.jpg",
+    "https://cdn.vox-cdn.com/thumbor/JJHDE7lRC7fN9KXgzxGgfJ_UNIg=/0x0:5184x3456/1200x675/filters:focal(2156x1844:2984x2672)/cdn.vox-cdn.com/uploads/chorus_image/image/64686790/899648644.jpg.0.jpg",
+    "https://texastech.com/images/2019/2/24/IMG_6154.JPG"
+  ]
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
@@ -22,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 loginDiv.addEventListener('click', function(e) {
   const firstButtons = document.querySelectorAll('.btn-step1')
-  if (e.target.classList) {
+  if (e.target.tagName === "BUTTON") {
     firstButtons.forEach(button => button.style.display = "none")
   }
   if (e.target.innerText === 'Login') {
@@ -59,7 +76,7 @@ function loginPost(loginBtn) {
   loginBtn.addEventListener('click', function(e) {
     e.preventDefault()
     let username = e.target.previousElementSibling.value
-    fetch(`${usersUrl}/${username}`)
+    fetch(`${usersUrl}/username/${username}`)
     .then(response => response.json())
     .then(user => {
       currentUser = user
@@ -71,25 +88,102 @@ function loginPost(loginBtn) {
   })
 }//end of login function
 
-// .catch(function(error) {
-//   debugger
-//   alert("Bad things! Ragnarők!");
-//   console.log(error.message);
-// })
 function loggedIn() {
   loginDiv.style.display = "none"
   fetchAllTicket()
   addEventListeners()
 }//login verifictaion
 
+setInterval(function(){
+  fetchAllTicket()
+  // checkForBidWins()
+}, 3000);
+
+function checkForBidWins() {
+  let ticketWithBids = ticketArray.filter(ticket => {
+    return (!ticket.status) && (ticket.bids.length > 0)
+  })
+  ticketWithBids.forEach(ticket => {
+    findBidWinner(ticket)
+  })
+}
+
+function findBidWinner(ticket) {
+  let winner = ticket.bids.pop()
+  bidWin(winner, ticket)
+}
+
+function addCashToSeller(ticket) {
+  let sellerCash
+  fetch(`http://localhost:3000/users/${ticket.seller_id}`)
+  .then(resp => resp.json())
+  .then(seller => {
+    sellerCash = seller.cash
+  })
+  console.log(sellerCash);
+  console.log(sellerCash += ticket.price);
+  // fetch(`http://localhost:3000/users/${ticket.seller_id}`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "Accept": "application/json"
+  //   },
+  //   body: JSON.stringify({
+  //     user_id: winner.user.id,
+  //     ticket_id: ticket.id,
+  //     price: winner.price,
+  //     seller_id: winner.user.id,
+  //   })
+  // })
+}
+function bidWin(winner, ticket) {
+
+  fetch("http://localhost:3000/purchases", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      user_id: winner.user.id,
+      ticket_id: ticket.id,
+      price: winner.price,
+      seller_id: winner.user.id,
+    })
+  })
+  .then(resp => resp.json())
+  .then(json => {
+    console.log(json);
+  })
+  fetch(`http://localhost:3000/tickets/${ticket.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      seller_id: winner.user.id,
+    })
+  })
+  .then(resp => resp.json())
+  .then(json => {
+    console.log(json);
+    removeBids(ticket.id)
+    if (currentTicket.id === ticket.id) {
+      showTicket(ticket)
+      bidsContainer.innerHTML = `<h6>${winner.user.name} has won the ticket!</h6>`
+    }
+  })
+}
+
 function signUpPost(signupBtn) {
-  signupBtn.addEventListener('click', function(e) {
+  loginDiv.addEventListener('submit', function(e) {
     e.preventDefault()
     let formInput = {
-      name: e.target.parentElement[0].value,
-      email: e.target.parentElement[1].value,
-      username: e.target.parentElement[2].value,
-      creditCard: e.target.parentElement[3].value
+      name: e.target[0].value,
+      email: e.target[1].value,
+      username: e.target[2].value,
+      creditCard: e.target[3].value
     }
     fetch(usersUrl, {
       method: "POST",
@@ -111,13 +205,18 @@ function signUpPost(signupBtn) {
   })
 }//end of signup form with listener
 
-function fetchAllTicket(){
+function fetchAllTicket() {
+  ticketArray = []
   fetch('http://localhost:3000/tickets/all')
   .then(r => r.json())
   .then(json => {
     json.forEach(ticket => {
-      ticketArray.push(ticket)
+      // let checkArray = ticketArray.map(el => { return el.id })
+      // if (!checkArray.includes(ticket.id)) {
+        ticketArray.push(ticket)
+      // }
     })
+    checkForBidWins()
   })
 }//fetch of all the tickets
 
@@ -174,11 +273,13 @@ function addEventListeners() {
 }//Event listener fo main container
 
 function addTicket() {
+  bidsContainer.innerHTML = ""
   ticketInfo.innerHTML=`
   <form id="add-ticket-form">
     <input type='text' value="" name="" placeholder="Title">
     Category
     <select style="display: block" name="Category">
+    <option value="">Select Category</option>
       <option value="Movies">Movies</option>
       <option value="Concerts">Concerts</option>
       <option value="Sports">Sports</option>
@@ -188,11 +289,48 @@ function addTicket() {
     <input type="date" name="bday">
     Time
     <input id="appt-time" type="time">
+    <div id="image-container" style="display:none" ></div>
+    <input id="image-url" type="hidden" value="">
     <input type='number' value="" name="" placeholder="Min Price">
     <input type='number' value="" name="" placeholder="Buy Now">
     <button type="submit" id='add-ticket' class='waves-effect waves-light btn'>Add Ticket</button>
   </form>
   `
+  addEventListenerForImageDiv()
+}
+
+function addEventListenerForImageDiv() {
+  let categorySelection = ticketInfo.querySelector('select')
+  let imageDiv = ticketInfo.querySelector('#image-container')
+  categorySelection.addEventListener('change', (e) => {
+    console.log(categorySelection.value);
+    imageDiv.style.display = ""
+    imageDiv.innerHTML = ""
+    let imagesArray = ticketImages[`${categorySelection.value}`]
+    imagesArray.forEach(image => {
+      imageDiv.innerHTML += `
+        <img src="${image}" />
+      `
+    })
+  })
+  addEventListenerForImages()
+}
+
+function addEventListenerForImages() {
+  const imagesContainer = ticketInfo.querySelector('#image-container')
+  const imageInput = ticketInfo.querySelector('#image-url')
+  imagesContainer.addEventListener('click', e => {
+    let imageArray = imagesContainer.querySelectorAll('img')
+    imageArray.forEach(image => {
+      image.style.border = ""
+    })
+    if (e.target.tagName === "IMG") {
+      let image = e.target
+      image.style.border = "3px black solid"
+
+      imageInput.value = e.target.src
+    }
+  })
 }
 
 function sellTicketForm(e) {
@@ -221,7 +359,7 @@ function renderTicket(element) {
 }//render all tickets
 
 function fetchUserTickets() {
-  fetch(`http://localhost:3000/users/${currentUser.username}`)
+  fetch(`http://localhost:3000/users/username/${currentUser.username}`)
   .then(r => r.json())
   .then(user => user.tickets)
   .then(tickets => {
@@ -262,6 +400,7 @@ function showTicket(ticket) {
   ticketInfo.classList = "card row s6"
 
   ticketInfo.innerHTML = `
+    <img src=${ticket.image_url} />
     <p>${ticket.title}</p>
     <p>${ticket.category}</p>
     <p>${ticket.location}</p>
@@ -269,6 +408,7 @@ function showTicket(ticket) {
     <p>Time ${time}</p>
     <p id="min_price-field">${ticketBidPrice}</p>
   `
+  bidForm.innerHTML = ""
   let ticketBids = ticket.bids
   if (ticket.bids.length > 0) {
     bidsContainer.innerHTML = `<h6>Bids</h6>`
@@ -327,11 +467,10 @@ function placeBid(e, input) {
   const ticketId = e.target.dataset.id
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
   // make sure input value is higher than min price
-  debugger
   if ((ticketObj.bids.length > 0) && (input <= parseInt(ticketObj.min_price))) {
     const alertTag = bidForm.querySelector('#input-alert')
     alertTag.innerHTML = `Amount must be higher than $${ticketObj.min_price}`
-  } else if (input <= parseInt(ticketObj.min_price)) {
+  } else if (input < parseInt(ticketObj.min_price)) {
     const alertTag = bidForm.querySelector('#input-alert')
     alertTag.innerHTML = `Amount must be higher than $${ticketObj.min_price}`
   } else {
@@ -349,6 +488,7 @@ function placeBid(e, input) {
     })
     .then(resp => resp.json())
     .then(json => {
+      ticketObj.bids.push(json)
       addBidToTicket(json)
       updateMinPrice(json, input)
     })
@@ -379,7 +519,7 @@ function patchMinPrice(json, input) {
 
 function addBidToTicket(bid) {
   bidForm.innerHTML = ""
-  debugger
+
   if (bidsContainer.innerHTML === "") {
     bidsContainer.innerHTML = `<h6>Bids</h6>`
   }
@@ -394,11 +534,13 @@ function addBidToTicket(bid) {
 function changeTicketStatus(ticket, ticketObj) {
   const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`)
   let index = ticketArray.indexOf(ticketObj)
-  debugger
+
   if (ticketArray[index].status) {
+
     ticketLi.remove()
     ticketArray[index].status = false
   } else {
+
     ticketLi.remove()
     ticketArray[index].status = true
   }
@@ -407,6 +549,7 @@ function changeTicketStatus(ticket, ticketObj) {
 function buyNow(e){
   const ticketId = e.target.dataset.id
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
+  // addCashToSeller(ticketObj)
   fetch("http://localhost:3000/purchases", {
     method: "POST",
     headers: {
@@ -422,6 +565,7 @@ function buyNow(e){
   })
   .then(resp => resp.json())
   .then(json => {
+    console.log(json);
     ticketInfo.innerHTML = `Purchased!`
     if (ticketObj.bids.length > 0) {
       removeBids(ticketId)
@@ -439,17 +583,18 @@ function buyNow(e){
       status: false,
     })
   })
+
 }
 
 function removeBids(ticketId) {
   fetch(`http://localhost:3000/bids/${ticketId}`, {
-    method: "DELETE",
+    method: "DELETE"
   })
 }
 
 ticketInfo.addEventListener('submit', (e) => {
   e.preventDefault()
-  debugger
+
   console.log(e.target);
   if (e.target.id === "add-ticket-form") {
     let date = `${e.target[3].value}`
@@ -465,6 +610,7 @@ ticketInfo.addEventListener('submit', (e) => {
 function sellTicket(e) {
   const ticketId = e.target.dataset.ticketId
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
+
   let formInput = {
     min_price: e.target[0].value,
     buy_now: e.target[1].value,
@@ -495,16 +641,17 @@ function deletePurchase(ticketId) {
 }
 
 function postNewTicket(e,date,timeInfo) {
-  debugger
+
   let formInput = {
     title: e.target[0].value,
     category: e.target[1].value,
     location: e.target[2].value,
     time: timeInfo,
-    min_price: e.target[5].value,
+    image_url: e.target[5].value,
+    min_price: e.target[6].value,
     buy_now: e.target[7].value,
     date: date,
-    status: true
+    status: true,
   }
   fetch(ticketsUrl, {
     method: "POST",
@@ -516,8 +663,8 @@ function postNewTicket(e,date,timeInfo) {
   })
   .then(response => response.json())
   .then(json => {
-    ticketInfo.innerHTML = `Ticket is now available for purchase!`
-    ticketArray.push(json)
-    body.innerHTML = `<image src=${json.image} />`
+    ticketInfo.innerHTML = `${json.message}`
+    // ticketArray.push(json.ticket)
+    fetchAllTicket()
   })
 }
