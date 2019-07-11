@@ -62,38 +62,40 @@ const ticketImages = {
 
 document.addEventListener('DOMContentLoaded', function() {
   loginDiv.innerHTML = `
-      <button type="submit" class='btn-step1 waves-effect waves-light btn login'>Login</button>
-      <button type="submit" class='btn-step1 waves-effect waves-light btn'>Sign up</button>
+    <button type="submit" id="show-login" class='btn-step1 waves-effect waves-light btn login'>Login</button>
+    <button type="submit" class='btn-step1 waves-effect waves-light btn'>Sign up</button>
   `
 })//End of domcontent loading
 
 loginDiv.addEventListener('click', function(e) {
   const firstButtons = document.querySelectorAll('.btn-step1')
+  console.log(e.target.innerText);
   if (e.target.tagName === "BUTTON") {
     firstButtons.forEach(button => button.style.display = "none")
   }
-  if (e.target.innerText === 'Login') {
+  if (e.target.id === 'login-confirm') {
+    loginPost()
+  }
+  if (e.target.id === 'show-login') {
     loginDiv.innerHTML = `
     <div class='row'>
-    <div class="input-field col">
-      <input type='text' id="username" value="" name="" placeholder="Username">
-      <button type="submit" id='login-confirm' class='waves-effect waves-light btn'>Login</button>
-    </div>
+      <div class="input-field col">
+        <input type='text' id="username" value="" name="" placeholder="Username">
+        <button type="submit" id='login-confirm' class='waves-effect waves-light btn'>Login</button>
+      </div>
     </div>
     `
-    const loginBtn = loginDiv.querySelector('#login-confirm')
-    loginPost(loginBtn)
   } else if (e.target.innerText === 'Sign up') {
     loginDiv.innerHTML = `
     <form>
-    <div class='row'>
-    <div class="input-field col s6">
-      <input type='text' value="" name="" placeholder="Name">
-      <input type='text' value="" name="" placeholder="Email">
-      <input type='text' value="" name="" placeholder="Username">
-      <input type='text' value="" name="" placeholder="Credit Card">
-      <button type="submit" id='signup' class='waves-effect waves-light btn'>Sign up</button>
-      </div>
+      <div class='row'>
+        <div class="input-field col s6">
+          <input type='text' value="" name="" placeholder="Name">
+          <input type='text' value="" name="" placeholder="Email">
+          <input type='text' value="" name="" placeholder="Username">
+          <input type='text' value="" name="" placeholder="Credit Card">
+          <button type="submit" id='signup' class='waves-effect waves-light btn'>Sign up</button>
+        </div>
       </div>
     </form>
     `
@@ -102,19 +104,24 @@ loginDiv.addEventListener('click', function(e) {
   }
 })//end of login/signup eventlistener
 
-function loginPost(loginBtn) {
-  loginBtn.addEventListener('click', function(e) {
-    e.preventDefault()
-    let username = e.target.previousElementSibling.value
-    fetch(`${usersUrl}/username/${username}`)
-    .then(response => response.json())
-    .then(user => {
-      currentUser = user
+function loginPost() {
+  let username = loginDiv.querySelector('input').value
+  fetch(`${usersUrl}/username/${username}`)
+  .then(response => response.json())
+  .then(json => {
+    if (json.code === 422) {
+      loginDiv.innerHTML += `
+      <p>${json.message}</p>
+      `
+      console.log("no");
+    } else {
+      console.log("yes");
       loggedIn()
+      currentUser = json
       navBarContainer.innerHTML = `
       <a href="">${currentUser.name}</a>
       `
-    })
+    }
   })
 }//end of login function
 
@@ -292,6 +299,8 @@ function addEventListeners() {
 }//Event listener fo main container
 
 function addTicket() {
+  bidForm.innerHTML = ""
+  ticketInfo.style.backgroundImage = ""
   bidsContainer.innerHTML = ""
   ticketInfo.innerHTML=`
   <form id="add-ticket-form" class="col s12">
@@ -579,7 +588,7 @@ function addBidToTicket(bid) {
 }
 
 function removeFromUserList(ticketObj) {
-  debugger
+  // debugger
   const ticketLi = ticketContainer.querySelector(`[data-id="${ticketObj.id}"]`).parentElement.parentNode
   ticketLi.remove()
   // ticketContainer.querySelector

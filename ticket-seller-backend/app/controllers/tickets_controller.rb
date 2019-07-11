@@ -1,4 +1,5 @@
 class TicketsController < ApplicationController
+
   def index
     Ticket.all.each do |ticket|
       if ticket.status
@@ -32,13 +33,6 @@ class TicketsController < ApplicationController
         original_time_split = original_time.split(" ")
         time_split = original_time_split[1]
         date_split = original_time_split[0]
-        # if user_date == date_split
-        #   if ticket.time > time_split
-        #     ticket.update(status: false)
-        #   end
-        # elsif user_date < date_split
-        #   ticket.update(status: false)
-        # end
         if (ticket.date == date_split && ticket.time <= time_split) || ticket.date < date_split
           ticket.update(status: false)
         end
@@ -55,25 +49,29 @@ class TicketsController < ApplicationController
 
   def create
     ticket = Ticket.new(ticket_params)
-    ticket.time = "#{ticket.time}:00"
-    original_time = Time.now().to_s
-    original_time_split = original_time.split(" ")
-    time_split = original_time_split[1]
-    date_split = original_time_split[0]
-    if ticket.date == date_split
-      if ticket.time > time_split
+    if ticket.valid?
+      ticket.time = "#{ticket.time}:00"
+      original_time = Time.now().to_s
+      original_time_split = original_time.split(" ")
+      time_split = original_time_split[1]
+      date_split = original_time_split[0]
+      if ticket.date == date_split
+        if ticket.time > time_split
+          ticket.save
+          ticket.update(status: true)
+          render json: {ticket: ticket, status: 200, message: "Ticket is now available for purchase!" }
+        else
+          render json: {message: "Time for this event has already passed!", status: 403}
+        end
+      elsif ticket.date > date_split
         ticket.save
         ticket.update(status: true)
         render json: {ticket: ticket, status: 200, message: "Ticket is now available for purchase!" }
       else
-        render json: {message: "error!", status: 403}
+        render json: {message: "The date for this event has already passed!", status: 403}
       end
-    elsif ticket.date > date_split
-      ticket.save
-      ticket.update(status: true)
-      render json: {ticket: ticket, status: 200, message: "Ticket is now available for purchase!" }
     else
-      render json: {message: "error!", status: 403}
+      render json: {message: ticket.errors.full_messages[0]}
     end
   end
 

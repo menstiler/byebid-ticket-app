@@ -81,9 +81,9 @@ footer {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0px, white 30px);
 }
 
-#ticket-bids {
+#ticket-bids, #image-container {
   overflow: auto;
-  height: 10vh;
+  height: 13vh;
 }
 
 p#input-alert {
@@ -95,4 +95,13 @@ p#input-alert {
 .page-footer {
     padding-top: 0px;
     background-color: cadetblue;
+}
+
+.first-col {
+  border: 0px
+}
+
+#main-column a {
+  display: flex;
+  align-items: center;
 }
