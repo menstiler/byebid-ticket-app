@@ -3,6 +3,8 @@ class PurchasesController < ApplicationController
   def create
     # byebug
     purchase = Purchase.create(purchase_params)
+    ticket = Ticket.find(params[:ticket_id])
+    ticket.update(status: false)
     render json: purchase
   end
 

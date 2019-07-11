@@ -293,7 +293,7 @@ function addEventListeners() {
 function addTicket() {
   bidsContainer.innerHTML = ""
   ticketInfo.innerHTML=`
-  <form id="add-ticket-form">
+  <form id="add-ticket-form" class="col s12">
     <input type='text' value="" name="" placeholder="Title">
     Category
     <select style="display: block" name="Category">
@@ -352,6 +352,7 @@ function addEventListenerForImages() {
 }
 
 function sellTicketForm(e) {
+  ticketInfo.style.removeProperty('background-image')
   bidsContainer.innerHTML = ""
   const ticketId = e.target.dataset.id
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
@@ -425,7 +426,7 @@ ticketContainer.addEventListener('click', function(e) {
 })//event listener for tickets container/ FETCHING ticket data
 
 function showTicket(ticket) {
-  ticketInfo.classList = "card row s6"
+  ticketInfo.classList = "card s6 card-background"
   ticketBidPrice = ticket.min_price
   let twenty4HrTime = `${ticket.time}`.split(":")
   let parsedTime = parseInt(twenty4HrTime[0])
@@ -436,15 +437,17 @@ function showTicket(ticket) {
   else if (parsedTime > 12){
     time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
   }
+  ticketInfo.style.backgroundImage = `url(${ticket.image_url})`
 
   ticketInfo.innerHTML = `
-    <img src=${ticket.image_url} />
-    <p>${ticket.title}</p>
+  <div class="ticket-details col s12">
+    <h5>${ticket.title}</h5>
     <p>${ticket.category}</p>
     <p>${ticket.location}</p>
-    <p>Date ${ticket.date}</p>
-    <p>Time ${time}</p>
-    <p id="min_price-field">${ticketBidPrice}</p>
+    <p><strong>Date:</strong> ${ticket.date}</p>
+    <p><strong>Time:</strong> ${time}</p>
+    <p id="min_price-field"><strong>Minimum Bid:</strong> $${ticketBidPrice}</p>
+  </div>
   `
   bidForm.innerHTML = ""
   let ticketBids = ticket.bids
@@ -463,13 +466,17 @@ function showTicket(ticket) {
   })
   ticketInfoContainer.appendChild(bidsContainer)
   if (ticket.status) {
-    ticketInfo.innerHTML +=  `
-    <button id='btn-buy' data-id=${ticket.id} class='waves-effect waves-light btn'>Buy Now for $${ticket.buy_now}</button>
-    <button id='btn-bid' data-id=${ticket.id} class='waves-effect waves-light btn'>Bid</button>
+    ticketInfo.childNodes[1].innerHTML +=  `
+    <div class="row col">
+      <button id='btn-buy' data-id=${ticket.id} class='waves-effect waves-light btn'>Buy Now for $${ticket.buy_now}</button>
+      <button id='btn-bid' data-id=${ticket.id} class='waves-effect waves-light btn'>Bid</button>
+    </div>
     `
   } else {
-    ticketInfo.innerHTML +=  `
-    <button id='btn-sell' data-id=${ticket.id} class='waves-effect waves-light btn'>Sell</button>
+    ticketInfo.childNodes[1].innerHTML +=  `
+    <div class="row col">
+      <button id='btn-sell' data-id=${ticket.id} class='waves-effect waves-light btn'>Sell</button>
+    </div>
     `
   }
 }// render the ticket info
@@ -485,6 +492,7 @@ ticketInfo.addEventListener('click', function(e) {
 })// listener buttons for buying tickets
 
 function bidInput(e) {
+  bidsContainer.style.display = "none"
   const ticketId = e.target.dataset.id
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
   bidForm.innerHTML =  `
@@ -557,31 +565,32 @@ function patchMinPrice(json, input) {
 
 function addBidToTicket(bid) {
   bidForm.innerHTML = ""
-
+  bidsContainer.style.display = ""
   if (bidsContainer.innerHTML === "") {
     bidsContainer.innerHTML = `<h6>Bids</h6>`
   }
   bidsContainer.innerHTML += `
-  <div class="card">
+  <div class="card col s12">
     <div>${bid.price}</div>
     <div>${bid.user.name}</div>
   </div>
   `
 }
 
-function changeTicketStatus(ticket, ticketObj) {
-  const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`).parentElement.parentNode
-  let index = ticketArray.indexOf(ticketObj)
-
-  if (ticketArray[index].status) {
-
-    ticketLi.remove()
-    ticketArray[index].status = false
-  } else {
-
-    ticketLi.remove()
-    ticketArray[index].status = true
-  }
+function removeFromUserList(ticketObj) {
+  debugger
+  const ticketLi = ticketContainer.querySelector(`[data-id="${ticketObj.id}"]`).parentElement.parentNode
+  ticketLi.remove()
+  // ticketContainer.querySelector
+  // if (ticketArray[index].status) {
+  //   debugger
+  //
+  //   ticketArray[index].status = false
+  // } else {
+  //
+  //   ticketLi.remove()
+  //   ticketArray[index].status = true
+  // }
 }
 
 function buyNow(e){
@@ -603,15 +612,29 @@ function buyNow(e){
   })
   .then(resp => resp.json())
   .then(json => {
-    console.log(json);
+    // console.log(json);
     if (ticketObj.bids.length > 0) {
       removeBids(ticketId)
       bidsContainer.innerHTML = ""
     }
-    changeTicketStatus(ticketId, ticketObj)
-      showTicket(ticketObj)
-      bidsContainer.innerHTML = `Purchased!`
+    // changeTicketStatus(ticketId, ticketObj)
+    fetchUserTickets()
+    showTicket(ticketObj)
+    bidsContainer.innerHTML = `Purchased!`
   })
+  // .then(() => {
+  //   fetch(`http://localhost:3000/tickets/${ticketId}`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Accept": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       status: false
+  //     })
+  //   })
+
+  // })
   bidsContainer.innerHTML = `<div class="preloader-wrapper active">
         <div class="spinner-layer spinner-red-only">
           <div class="circle-clipper left">
@@ -623,17 +646,6 @@ function buyNow(e){
           </div>
         </div>
       </div>`
-  fetch(`http://localhost:3000/tickets/${ticketId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify({
-      status: false,
-    })
-  })
-
 }
 
 function removeBids(ticketId) {
@@ -658,6 +670,7 @@ ticketInfo.addEventListener('submit', (e) => {
 })
 
 function sellTicket(e) {
+  currentTicket.status = false
   const ticketId = e.target.dataset.ticketId
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
 
@@ -677,11 +690,13 @@ function sellTicket(e) {
   })
   .then(response => response.json())
   .then(json => {
-    ticketInfo.innerHTML = `Ticket is now available for purchase!`
+    ticketInfo.innerHTML = ""
+    bidsContainer.innerHTML = `Ticket is now available for purchase!`
     deletePurchase(ticketId)
-    changeTicketStatus(ticketId, ticketObj)
+    fetchUserTickets()
+    // removeFromUserList(json)
+    showTicket(json)
   })
-
 }
 
 function deletePurchase(ticketId) {
@@ -716,4 +731,5 @@ function postNewTicket(e,date,timeInfo) {
     bidsContainer.innerHTML = `${json.message}`
     showTicket(json.ticket)
   })
+
 }
