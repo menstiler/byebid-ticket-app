@@ -35,7 +35,7 @@ footer {
 }
 
 .card {
-  margin: -0.5rem 0 1rem 0;
+  /* margin: -0.5rem 0 1rem 0; */
 }
 
 .card .card-content {
@@ -44,7 +44,8 @@ footer {
 }
 
 .collection {
-      border: 1px solid #fff;
+  margin: 0px;
+  border: 0px
 }
 #ticket-container {
   padding: 0;

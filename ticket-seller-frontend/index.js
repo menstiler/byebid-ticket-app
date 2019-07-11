@@ -322,6 +322,7 @@ function addEventListenerForImages() {
 }
 
 function sellTicketForm(e) {
+  bidsContainer.innerHTML = ""
   const ticketId = e.target.dataset.id
   let ticketObj = ticketArray.find(function(ticket){ return ticket.id === parseInt(ticketId)})
   ticketInfo.innerHTML= `
@@ -394,7 +395,6 @@ ticketContainer.addEventListener('click', function(e) {
 })//event listener for tickets container/ FETCHING ticket data
 
 function showTicket(ticket) {
-
   ticketInfo.classList = "card row s6"
   ticketBidPrice = ticket.min_price
   let twenty4HrTime = `${ticket.time}`.split(":")
@@ -540,7 +540,7 @@ function addBidToTicket(bid) {
 }
 
 function changeTicketStatus(ticket, ticketObj) {
-  const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`)
+  const ticketLi = ticketContainer.querySelector(`[data-id="${ticket}"]`).parentElement.parentNode
   let index = ticketArray.indexOf(ticketObj)
 
   if (ticketArray[index].status) {
@@ -574,13 +574,25 @@ function buyNow(e){
   .then(resp => resp.json())
   .then(json => {
     console.log(json);
-    ticketInfo.innerHTML = `Purchased!`
     if (ticketObj.bids.length > 0) {
       removeBids(ticketId)
       bidsContainer.innerHTML = ""
     }
     changeTicketStatus(ticketId, ticketObj)
+      showTicket(ticketObj)
+      bidsContainer.innerHTML = `Purchased!`
   })
+  bidsContainer.innerHTML = `<div class="preloader-wrapper active">
+        <div class="spinner-layer spinner-red-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>`
   fetch(`http://localhost:3000/tickets/${ticketId}`, {
     method: "PATCH",
     headers: {
@@ -671,8 +683,7 @@ function postNewTicket(e,date,timeInfo) {
   })
   .then(response => response.json())
   .then(json => {
-    ticketInfo.innerHTML = `${json.message}`
-    // ticketArray.push(json.ticket)
-    fetchAllTicket()
+    bidsContainer.innerHTML = `${json.message}`
+    showTicket(json.ticket)
   })
 }
