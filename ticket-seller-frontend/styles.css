@@ -16,20 +16,20 @@ footer {
 }
 
 .card.horizontal .card-image img {
-  height: 130px;
+  height: 215px;
   width: 218px;
   object-fit: cover;
 }
 
 #add-ticket-form #image-container img {
-    max-width: 250px;
-    height: 175px;
+    max-width: 71px;
+    height: 70px;
     object-fit: cover;
 }
 
 #ticket-info img {
     object-fit: cover;
-    height: 131px;
+    height: 220px;
     width: 100%;
     object-position: center;
 }
@@ -44,8 +44,16 @@ footer {
 }
 
 .collection {
-      border: 1px solid #fff;
+  overflow: auto;
+  height: 84vh;
+  border: 1px solid #fff;
 }
 #ticket-container {
   padding: 0;
+}
+
+#add-ticket-form #image-container img {
+    max-width: 98px;
+    height: 79px;
+    object-fit: cover;
 }
