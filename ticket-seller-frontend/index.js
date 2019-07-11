@@ -90,13 +90,11 @@ function loginPost(loginBtn) {
 
 function loggedIn() {
   loginDiv.style.display = "none"
-  fetchAllTicket()
   addEventListeners()
 }//login verifictaion
 
 setInterval(function(){
   fetchAllTicket()
-  // checkForBidWins()
 }, 3000);
 
 function checkForBidWins() {
@@ -153,7 +151,7 @@ function bidWin(winner, ticket) {
   })
   .then(resp => resp.json())
   .then(json => {
-    console.log(json);
+    // console.log(json);
   })
   fetch(`http://localhost:3000/tickets/${ticket.id}`, {
     method: "PATCH",
@@ -211,21 +209,11 @@ function fetchAllTicket() {
   .then(r => r.json())
   .then(json => {
     json.forEach(ticket => {
-      // let checkArray = ticketArray.map(el => { return el.id })
-      // if (!checkArray.includes(ticket.id)) {
-        ticketArray.push(ticket)
-      // }
+      ticketArray.push(ticket)
     })
     checkForBidWins()
   })
 }//fetch of all the tickets
-
-function renderTicket(element) {
-  ticketContainer.classList = "collection"
-  ticketContainer.innerHTML += `
-  <a data-id=${element.id} class="collection-item">${element.title}</a>
-  `
-}//render all tickets
 
 function filterArray(category) {
   ticketContainer.innerHTML = ""
@@ -352,20 +340,20 @@ function sellTicketForm(e) {
 }
 
 function renderTicket(ticket) {
-      let twenty4HrTime = `${ticket.time}`.split(":")
-      let parsedTime = parseInt(twenty4HrTime[0])
-      let time = ""
-      if (parsedTime < 12){
-        time = `${twenty4HrTime[0]}:${twenty4HrTime[1]} AM`
-      }
-      else if (parsedTime > 12){
-        time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
-      }
+  let twenty4HrTime = `${ticket.time}`.split(":")
+  let parsedTime = parseInt(twenty4HrTime[0])
+  let time = ""
+  if (parsedTime < 12){
+    time = `${twenty4HrTime[0]}:${twenty4HrTime[1]} AM`
+  }
+  else if (parsedTime > 12){
+    time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
+  }
   ticketContainer.classList = "collection"
   ticketContainer.innerHTML += `
    <div class="card horizontal" >
       <div class="card-image">
-        <img src="https://lorempixel.com/100/190/nature/6" style="height:150px;">
+        <img src="${ticket.image_url}" style="height:150px;">
       </div>
       <div class="card-stacked">
         <div class="card-content" data-id= ${ticket.id}>
@@ -395,7 +383,6 @@ function fetchUserTickets() {
 
 ticketContainer.addEventListener('click', function(e) {
   if (e.target.dataset.id) {
-    ticketFloat.style.display = "none"
     const ticketId = e.target.dataset.id
     fetch(`${ticketsUrl}/${ticketId}`)
     .then(response => response.json())
@@ -408,7 +395,7 @@ ticketContainer.addEventListener('click', function(e) {
 
 function showTicket(ticket) {
 
-//   ticketInfo.classList = "card col s12 m7"
+  ticketInfo.classList = "card row s6"
   ticketBidPrice = ticket.min_price
   let twenty4HrTime = `${ticket.time}`.split(":")
   let parsedTime = parseInt(twenty4HrTime[0])
@@ -419,7 +406,6 @@ function showTicket(ticket) {
   else if (parsedTime > 12){
     time = `${twenty4HrTime[0]-12}:${twenty4HrTime[1]} PM`
   }
-  ticketInfo.classList = "card row s6"
 
   ticketInfo.innerHTML = `
     <img src=${ticket.image_url} />
