@@ -16,17 +16,47 @@ const ticketImages = {
   Concerts: [
     "https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
     "https://musicoomph.com/wp-content/uploads/2018/03/benefits-of-going-to-live-music-concerts.jpg",
-    "https://eevents.s3.amazonaws.com/images/og/concert.jpg"
+    "https://eevents.s3.amazonaws.com/images/og/concert.jpg",
+    "https://ewscripps.brightspotcdn.com/dims4/default/3ede789/2147483647/strip/true/crop/3280x1845+0+0/resize/1280x720!/quality/90/?url=https%3A%2F%2Fewscripps.brightspotcdn.com%2F54%2F92%2F9a7bcd854da88d29414b52fc6dd7%2Fgettyimages-1020376838.jpg",
+    "https://www.grammy.com/sites/com/files/styles/image_landscape_hero/public/billyjoel-hero-461257304.jpg?itok=99M62l5Q",
+    "https://www.maxim.com/.image/t_share/MTU5MDQ2NzEyNDc4OTM0ODA4/john-mayer-promo.jpg",
+    "https://uproxx.files.wordpress.com/2019/02/drake.jpg?quality=100&w=650",
+    "https://www.hypebot.com/.a/6a00d83451b36c69e201b7c7f299c5970b-800wi",
+    "https://uproxx.files.wordpress.com/2019/02/jayz-grid-uproxx.jpg?quality=100&w=650",
+    "https://media.gq.com/photos/5a7a0448c37bfa147f52dca7/16:9/w_1280,c_limit/02_2018_JustinTimberlake_Style_3x2.jpg",
+    "https://www.grammy.com/sites/com/files/styles/image_landscape_hero/public/justinbieber-hero-498329920.jpg?itok=lw-2pKKn",
+    "https://images.complex.com/complex/images/c_limit,dpr_auto,q_90,w_720/fl_lossy,pg_1/du6kdteeucmqm1yyozb3/taylor-swift-getty-don-arnold-tas18",
+    "https://pbs.twimg.com/profile_images/1129254673209339905/hMI9TU58_400x400.png",
+    "https://yt3.ggpht.com/a/AGF-l7-_W3gRRaxpNq27H5zajHSqO8aD3a_vxXrKow=s900-mo-c-c0xffffffff-rj-k-no"
   ],
   Movies: [
-    "http://cdn.amreading.com/wp-content/uploads/636054008085485119871913223_Movies.jpg",
-    "https://cdn.mos.cms.futurecdn.net/PBpaPfht3TSS2rSg5ezHE-480-80.jpg",
-    "https://bloximages.newyork1.vip.townnews.com/kmov.com/content/tncms/assets/v3/editorial/c/27/c27ad91e-3b81-11e9-9e30-5fc881c4286b/5c78202b0caba.image.jpg?resize=400%2C266"
+    "https://amc-theatres-res.cloudinary.com/amc-cdn/production/2/movies/45800/45838/PosterDynamic/67602.jpg",
+    "http://cms.ipressroom.com.s3.amazonaws.com/337/files/20191/jag_cz_movie_theater_retro_shutterstock_594132752-1529438777-6045.jpg",
+    "https://bloximages.newyork1.vip.townnews.com/kmov.com/content/tncms/assets/v3/editorial/c/27/c27ad91e-3b81-11e9-9e30-5fc881c4286b/5c78202b0caba.image.jpg?resize=400%2C266",
+    "https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,w_750/v1/amc-cdn/production/2/movies/58600/58558/PromotionDynamic/66619.jpg",
+    "http://www.gstatic.com/tv/thumb/v22vodart/12004128/p12004128_v_v8_aa.jpg",
+    "http://www.gstatic.com/tv/thumb/v22vodart/14569140/p14569140_v_v8_am.jpg",
+    "https://www.foxmovies.com/s3/dev-temp/en-US/__5ca7f1be9b27a.jpg",
+    "http://www.gstatic.com/tv/thumb/movieposters/15465632/p15465632_p_v8_ah.jpg",
+    "http://www.gstatic.com/tv/thumb/v22vodart/14596224/p14596224_v_v8_aa.jpg",
+    "http://www.gstatic.com/tv/thumb/movieposters/16357164/p16357164_p_v8_ar.jpg",
+    "https://m.media-amazon.com/images/M/MV5BMTY0MzUwODc4N15BMl5BanBnXkFtZTgwMjMyMjY0NzM@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+    "http://www.gstatic.com/tv/thumb/v22vodart/14568731/p14568731_v_v8_ab.jpg",
+    "http://www.gstatic.com/tv/thumb/v22vodart/81732/p81732_v_v8_aa.jpg",
+    "http://www.gstatic.com/tv/thumb/v22vodart/15366809/p15366809_v_v8_af.jpg"
   ],
   Sports: [
     "https://s.abcnews.com/images/International/yankees-red-sox-london-ap-jt-190629_hpMain_16x9_608.jpg",
     "https://cdn.vox-cdn.com/thumbor/JJHDE7lRC7fN9KXgzxGgfJ_UNIg=/0x0:5184x3456/1200x675/filters:focal(2156x1844:2984x2672)/cdn.vox-cdn.com/uploads/chorus_image/image/64686790/899648644.jpg.0.jpg",
-    "https://texastech.com/images/2019/2/24/IMG_6154.JPG"
+    "https://texastech.com/images/2019/2/24/IMG_6154.JPG",
+    "https://rfathead-res.cloudinary.com/image/upload/h_300,w_300/logos/lgo_mlb_new_york_yankees.png",
+    "http://content.sportslogos.net/logos/54/67/full/1232.png",
+    "http://goodifitgoes.com/wp-content/uploads/2016/09/knicks-logo.jpg",
+    "https://timenewsfeed.files.wordpress.com/2012/05/nets.jpg?w=600",
+    "https://s.hdnux.com/photos/47/04/67/10243574/3/920x920.jpg",
+    "https://cdn.shopify.com/s/files/1/1629/1645/products/LCnvsNJDevl.jpg?v=1531407111",
+    "https://i.pinimg.com/originals/6b/4d/56/6b4d5666e944fc30b824be9508f2ac25.jpg",
+    "https://www.underconsideration.com/brandnew/archives/new_york_jets_logo.png"
   ]
 }
 
@@ -354,7 +384,7 @@ function renderTicket(ticket) {
   ticketContainer.innerHTML += `
    <div class="card horizontal" >
       <div class="card-image">
-        <img src="${ticket.image_url}" style="height:150px;">
+        <img data-id= ${ticket.id} src="${ticket.image_url}" style="height:153px;">
       </div>
       <div class="card-stacked">
         <div class="card-content" data-id= ${ticket.id}>
