@@ -89,3 +89,10 @@ footer {
 p#input-alert {
   margin:0px
 }
+.nav-wrapper {
+  background-color: cadetblue;
+}
+.page-footer {
+    padding-top: 0px;
+    background-color: cadetblue;
+}
