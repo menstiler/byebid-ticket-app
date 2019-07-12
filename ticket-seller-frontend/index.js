@@ -296,6 +296,7 @@ function addEventListeners() {
     console.log(event.target.innerText);
     switch(event.target.dataset.id) {
     case "3":
+    console.log(event.target);
       filterArray("Movies")
       break;
 
