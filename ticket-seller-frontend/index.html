@@ -12,27 +12,29 @@
     <div class="nav-wrapper">
       <a href="#" class="brand-logo center">ByeBid</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <a href="#" class="right">
+        בס״ד</a> 
       </ul>
     </div>
   </nav>
 
     <div class="row">
 
-      <div class="col s2" class="collection ">
-        <div class="collection first-col">
+      <div class="col s2" class="collection">
+        <div class="collection first-col" id="slider" style="display:none">
           <ul id="main-column">
-           <a href="#!" class="collection-item">All Tickets<span class="material-icons">format_align_justify</span></a>
-           <a href="#!" class="collection-item">My Tickets<span class="material-icons">account_balance_wallet</span></a>
+           <a href="#!" data-id="1" class="collection-item">All Tickets<span class="material-icons">format_align_justify</span></a>
+           <a href="#!" data-id="2" class="collection-item">My Tickets<span class="material-icons">account_balance_wallet</span></a>
            <div class="section">
 
            </div>
-           <a href="#!" class="collection-item">Movies<span class="material-icons">movie</span></a>
-           <a href="#!" class="collection-item">Concerts<span class="material-icons">library_music</span></a>
-           <a href="#!" class="collection-item">Sports<span class="material-icons">brightness_1</span></a>
+           <a href="#!" data-id="3" class="collection-item">Movies<span class="material-icons">movie</span></a>
+           <a href="#!" data-id="4" class="collection-item">Concerts<span class="material-icons">library_music</span></a>
+           <a href="#!" data-id="5" class="collection-item">Sports<span class="material-icons">brightness_1</span></a>
            <div class="section">
 
            </div>
-           <a href="#!" class="collection-item">Add Ticket<span class="material-icons">add</span></a>
+           <a href="#!" data-id="6" class="collection-item">Add Ticket<span class="material-icons">add</span></a>
          </ul>
       </div>
       </div>
@@ -41,15 +43,13 @@
         </ul>
       </div>
       <div class="col s5 m6">
-        <div id="ticketInfoFloat"></div>
-
         <div id="ticket-container">
           <div id="ticket-info"></div>
           <div id="ticket-form" class="col s12"></div>
           <div id="ticket-bids" class="col s12"></div>
         </div>
       </div>
-      <div class="col s8" id="login">
+      <div class="col s12 centered" id="login">
       </div>
       <div class="col s8" id="add-ticket">
 

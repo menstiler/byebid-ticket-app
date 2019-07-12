@@ -6,8 +6,13 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.create(user_params)
-    render json: user
+    user = User.new(user_params)
+    if user.valid?
+      user.save
+      render json: {user: user, code: 200}
+    else
+      render json: {code: 422, message: user.errors.full_messages[0]}
+    end
   end
 
   def show
@@ -42,6 +47,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :cc, :cash)
+    params.require(:user).permit(:name, :username, :email, :cc, :cash)
   end
 end

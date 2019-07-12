@@ -11,6 +11,7 @@ class TicketsController < ApplicationController
         date_split = original_time_split[0]
         if ticket.date == date_split
           if ticket.time < time_split
+            # byebug
             ticket.update(status: false)
           end
         else ticket.date < date_split
